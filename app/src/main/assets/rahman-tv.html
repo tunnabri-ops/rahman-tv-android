@@ -376,6 +376,216 @@ html[data-hatch-target="tv"] #castBtn{display:none}
 .up-name{font-size:14px; font-weight:600; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .up-sub{font-size:12.5px; color:var(--text-2); margin-top:3px}
 
+/* ---------- Watch view: Teleghor-style player page (শুধু প্লেয়ার পেজ) ---------- */
+.watch{
+  --nv-bg:#05070f; --nv-bg2:#0a1120; --nv-panel:#0d1526; --nv-panel2:#111c33;
+  --nv-line:#1e293b; --nv-green:#22c55e; --nv-pink:#ff2d55; --nv-sub:#94a3b8;
+  margin:0 -22px; padding:8px 22px 40px; color:#fff;
+  background:linear-gradient(180deg,var(--nv-bg2),var(--nv-bg) 260px,var(--nv-bg));
+}
+.watch .back-btn{background:var(--nv-panel); border:1px solid var(--nv-line); color:#fff}
+.watch .back-btn:hover{background:var(--nv-panel2)}
+.watch .player-wrap{border-radius:18px; border:0}
+.watch .player-wrap:fullscreen{border-radius:0}
+.watch .player-msg{background:rgba(5,7,15,.88)}
+@media (min-width:1101px){
+  .watch-left{position:sticky; top:calc(var(--header-h) + 10px)}
+}
+@media (max-width:640px){
+  .watch{margin:0 -14px; padding:8px 14px 34px}
+}
+html[data-hatch-target="tv"] .watch{margin:0; padding:0; background:#05070f}
+html[data-hatch-target="tv"] .watch-left{position:static}
+
+/* Custom controls overlay */
+.tg-controls{
+  position:absolute; left:0; right:0; bottom:0; z-index:6; padding:30px 14px 10px;
+  background:linear-gradient(180deg,transparent,rgba(3,6,14,.88) 58%);
+  opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s; pointer-events:none;
+}
+.tg-controls.show{opacity:1; visibility:visible}
+.player-wrap.tg-idle{cursor:none}
+.tg-time-row{display:flex; justify-content:space-between; font-size:13.5px; color:#fff; margin-bottom:6px; text-shadow:0 1px 4px rgba(0,0,0,.65)}
+.tg-seek{position:relative; height:16px; display:flex; align-items:center; pointer-events:auto; cursor:pointer; touch-action:none}
+.tg-seek-track{position:relative; height:4px; flex:1; border-radius:2px; background:rgba(255,255,255,.35)}
+.tg-seek-played{position:absolute; left:0; top:0; bottom:0; width:0%; border-radius:2px; background:var(--nv-pink)}
+.tg-seek-thumb{position:absolute; top:50%; left:0%; width:13px; height:13px; border-radius:50%; background:var(--nv-pink); transform:translate(-50%,-50%); box-shadow:0 1px 5px rgba(0,0,0,.5); pointer-events:none}
+.tg-btn-row{display:flex; align-items:center; gap:6px; margin-top:3px}
+.tg-ctl-btn{
+  width:40px; height:40px; min-width:40px; border:0; border-radius:50%; background:transparent; color:#fff;
+  cursor:pointer; display:inline-flex; align-items:center; justify-content:center; pointer-events:auto;
+}
+.tg-ctl-btn:hover{background:rgba(255,255,255,.14)}
+.tg-ctl-btn svg{width:24px; height:24px; fill:#fff}
+.tg-spacer{flex:1}
+.tg-q-wrap{position:relative; pointer-events:auto}
+.tg-q-btn{
+  height:30px; min-height:30px; padding:0 12px; border-radius:8px; cursor:pointer;
+  background:rgba(13,21,38,.8); color:#fff; font-size:12.5px; font-weight:600; border:1px solid rgba(255,255,255,.18);
+}
+.tg-q-menu{
+  position:absolute; right:0; bottom:40px; min-width:132px; z-index:9; display:none;
+  background:var(--nv-panel2); border:1px solid var(--nv-line); border-radius:12px; padding:5px;
+  box-shadow:0 14px 34px rgba(0,0,0,.55);
+}
+.tg-q-menu.open{display:block}
+.tg-q-menu button{display:block; width:100%; text-align:left; border:0; background:transparent; color:#fff; font-size:13.5px; padding:8px 10px; border-radius:8px; cursor:pointer}
+.tg-q-menu button:hover{background:rgba(255,255,255,.1)}
+.tg-q-menu button.sel{color:var(--nv-green); font-weight:700}
+
+/* Loading + empty states */
+.tg-loading,.tg-empty{
+  position:absolute; inset:0; z-index:7; display:none; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center; padding:20px;
+}
+.tg-loading.show{display:flex; background:rgba(5,7,15,.74)}
+.tg-empty.show{display:flex; background:var(--nv-panel)}
+.player-wrap.is-yt .tg-controls,.player-wrap.is-yt .tg-loading,.player-wrap.is-yt .tg-empty{display:none !important}
+.tg-spinner{
+  width:44px; height:44px; border-radius:50%; margin-bottom:16px;
+  border:4px solid rgba(255,255,255,.18); border-top-color:var(--nv-green);
+  animation:tgspin .8s linear infinite;
+}
+@keyframes tgspin{to{transform:rotate(360deg)}}
+.tg-load-title{font-size:16px; font-weight:800; letter-spacing:1.2px; color:#fff}
+.tg-load-sub{color:var(--nv-sub); font-size:13.5px; margin-top:5px}
+.tg-empty-icon{
+  width:74px; height:74px; border-radius:50%; margin-bottom:14px;
+  background:var(--nv-panel2); border:1px solid var(--nv-line);
+  display:flex; align-items:center; justify-content:center;
+}
+.tg-empty-icon svg{width:36px; height:36px; fill:var(--nv-sub)}
+.tg-empty h3{margin:0 0 5px; font-size:19px; color:#fff}
+.tg-empty p{margin:0 0 16px; color:var(--nv-sub); font-size:14px}
+.tg-empty-btns{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+.tg-btn-ghost{height:40px; padding:0 18px; border-radius:12px; border:1px solid var(--nv-line); background:var(--nv-panel2); color:#fff; font-size:14px; font-weight:600; cursor:pointer}
+.tg-btn-red{height:40px; padding:0 18px; border-radius:12px; border:0; background:var(--nv-pink); color:#fff; font-size:14px; font-weight:700; cursor:pointer}
+
+/* Category pill strip (প্লেয়ারের সম্পূর্ণ নিচে — কন্ট্রোল ঢাকে না) */
+.tg-pills{display:flex; gap:8px; overflow-x:auto; padding:14px 0 2px; scrollbar-width:none}
+.tg-pills::-webkit-scrollbar{display:none}
+.tg-pill{
+  flex-shrink:0; height:38px; padding:0 14px; border-radius:12px; cursor:pointer; white-space:nowrap;
+  border:1px solid var(--nv-line); background:var(--nv-panel); color:#e2e8f0; font-size:13.5px; font-weight:600;
+}
+.tg-pill .n{color:var(--nv-sub); font-weight:500; margin-left:5px}
+.tg-pill.active{background:#fff; color:#0a1120; border-color:#fff}
+.tg-pill.active .n{color:#475569}
+
+/* Title block + live stats */
+.tg-title-block{display:flex; align-items:center; gap:13px; padding:14px 0 2px; flex-wrap:wrap}
+.tg-tv-icon{
+  width:46px; height:46px; border-radius:12px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:17px; color:#fff;
+  background:linear-gradient(135deg,#7f1d1d,#1e3a8a);
+}
+.tg-title-txt{min-width:0; flex:1}
+.tg-title-txt h2{font-size:19px; font-weight:700; margin:0; line-height:1.35; color:#fff}
+.tg-title-txt p{margin:3px 0 0; color:var(--nv-sub); font-size:13.5px}
+.tg-fav{
+  width:40px; height:40px; min-width:40px; border-radius:50%; cursor:pointer; flex-shrink:0;
+  border:1px solid var(--nv-line); background:var(--nv-panel);
+  display:inline-flex; align-items:center; justify-content:center;
+}
+.tg-fav svg{width:20px; height:20px; fill:#94a3b8}
+.tg-fav.on svg{fill:var(--nv-pink)}
+.tg-stats{display:flex; gap:20px; border-left:1px solid var(--nv-line); padding-left:20px}
+.tg-stat{display:flex; flex-direction:column; gap:1px}
+.tg-stat-label{font-size:11.5px; color:var(--nv-sub); letter-spacing:.2px; white-space:nowrap}
+.tg-stat-val{font-size:15px; font-weight:700; color:var(--nv-green); white-space:nowrap}
+.tg-yt-link{color:var(--nv-green); font-size:13.5px; font-weight:600; text-decoration:none; display:inline-block; margin-top:9px}
+@media (max-width:640px){
+  .tg-stats{width:100%; border-left:0; border-top:1px solid var(--nv-line); padding:10px 0 0; margin-top:2px}
+}
+
+/* Right column: search + filter + catalog sections */
+.tg-search-row{display:flex; gap:9px; margin-bottom:4px}
+.tg-search{
+  flex:1; display:flex; align-items:center; gap:8px; height:42px; padding:0 13px;
+  border-radius:12px; background:var(--nv-panel); border:1px solid var(--nv-line); min-width:0;
+}
+.tg-search svg{width:19px; height:19px; fill:var(--nv-sub); flex-shrink:0}
+.tg-search input{flex:1; min-width:0; border:0; outline:none; background:transparent; color:#fff; font-size:14px; height:100%}
+.tg-search input::placeholder{color:var(--nv-sub)}
+.tg-filter-wrap{position:relative; flex-shrink:0}
+.tg-filter-btn{
+  height:42px; padding:0 16px; border-radius:12px; cursor:pointer;
+  border:1px solid var(--nv-line); background:var(--nv-panel); color:#fff;
+  font-size:14px; font-weight:600; display:inline-flex; align-items:center; gap:7px;
+}
+.tg-filter-btn svg{width:18px; height:18px; fill:currentColor}
+.tg-filter-menu{
+  position:absolute; right:0; top:48px; z-index:20; min-width:172px; display:none;
+  background:var(--nv-panel2); border:1px solid var(--nv-line); border-radius:12px; padding:5px;
+  box-shadow:0 14px 34px rgba(0,0,0,.5);
+}
+.tg-filter-menu.open{display:block}
+.tg-filter-menu button{display:block; width:100%; text-align:left; border:0; background:transparent; color:#fff; font-size:14px; padding:9px 11px; border-radius:8px; cursor:pointer}
+.tg-filter-menu button:hover{background:rgba(255,255,255,.09)}
+.tg-filter-menu button.sel{color:var(--nv-green); font-weight:700}
+.tg-sec{margin-top:20px}
+.tg-sec-head{display:flex; align-items:baseline; gap:9px}
+.tg-sec-head h3{font-size:17px; font-weight:700; margin:0; color:#fff}
+.tg-sec-count{color:var(--nv-sub); font-size:13px}
+.tg-sec-all{margin-left:auto; border:0; background:transparent; color:var(--nv-green); font-size:13.5px; font-weight:700; cursor:pointer; padding:4px 2px}
+.tg-sec-line{height:3px; border-radius:2px; margin:9px 0 12px; background:linear-gradient(90deg,var(--nv-pink),var(--nv-green))}
+.tg-row{display:flex; gap:12px; overflow-x:auto; padding-bottom:8px}
+.tg-card{
+  flex:0 0 188px; width:188px; padding:8px; text-align:left; color:#fff; cursor:pointer;
+  border:1px solid var(--nv-line); background:var(--nv-panel); border-radius:16px;
+}
+.tg-card-name{
+  font-size:13.5px; font-weight:600; line-height:1.35; margin-top:8px;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.tg-card-sub{font-size:12px; color:var(--nv-sub); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.tg-match{
+  flex-basis:212px; width:212px; padding:12px; display:flex; flex-direction:column; gap:9px;
+  border-color:rgba(34,197,94,.55); box-shadow:0 0 16px rgba(34,197,94,.16);
+}
+.tg-live-pill{
+  align-self:flex-start; background:var(--nv-pink); color:#fff;
+  font-size:11.5px; font-weight:800; letter-spacing:.5px; padding:3px 9px; border-radius:8px;
+}
+.tg-match-logo{height:52px; display:flex; align-items:center; justify-content:center}
+.tg-match-logo img{max-height:52px; max-width:72%; object-fit:contain}
+.tg-vs{display:flex; align-items:center; justify-content:center; gap:8px; text-align:center}
+.tg-vs span{font-size:13px; font-weight:600; flex:1; line-height:1.3}
+.tg-vs b{font-size:21px; font-weight:900; color:#fff; flex-shrink:0}
+.tg-match-name{font-size:14.5px; font-weight:700; text-align:center; line-height:1.35}
+.tg-watch-btn{
+  margin-top:auto; text-align:center; border-radius:10px; padding:8px 0;
+  background:rgba(34,197,94,.14); color:var(--nv-green); font-weight:700; font-size:13.5px;
+}
+.tg-none{color:var(--nv-sub); font-size:14px; padding:16px 2px}
+html[data-hatch-target="tv"] .tg-card{flex-basis:150px; width:150px}
+html[data-hatch-target="tv"] .tg-match{flex-basis:170px; width:170px}
+
+/* ---------- Smoothness: হালকা অ্যানিমেশন, মোমেন্টাম স্ক্রল, স্কেলিটন ---------- */
+@keyframes viewIn{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:translateY(0)}}
+@keyframes cardIn{from{opacity:0}to{opacity:1}}
+.view-in{animation:viewIn .25s ease both}
+.watch.open{animation:viewIn .28s ease}
+.panel.open{animation:viewIn .28s ease}
+.card{animation:cardIn .25s ease both}
+html:not([data-hatch-target="tv"]) .card{content-visibility:auto; contain-intrinsic-size:auto 320px}
+.chips,.tg-pills,.tg-row,.sidebar{-webkit-overflow-scrolling:touch; overscroll-behavior-x:contain}
+.chip,.tg-pill,.tg-card,.pill-btn,.nav-item{transition:background-color .15s ease, color .15s ease, border-color .15s ease}
+.skel{border-radius:12px; overflow:hidden}
+.skel .sk-thumb{
+  aspect-ratio:16/9;
+  background:linear-gradient(100deg,#1c1c1c 40%,#2b2b2b 50%,#1c1c1c 60%);
+  background-size:200% 100%; animation:skpulse 1.2s linear infinite;
+}
+.skel .sk-line{height:13px; border-radius:6px; margin:12px 4px 0; background:#242424}
+.skel .sk-line.short{width:55%; margin-bottom:6px}
+@keyframes skpulse{to{background-position:-200% 0}}
+html[data-hatch-target="tv"] .card,
+html[data-hatch-target="tv"] .watch.open,
+html[data-hatch-target="tv"] .panel.open,
+html[data-hatch-target="tv"] .view-in{animation:none}
+
 /* ---------- Live Events section (feed top) ---------- */
 .live-sec-head{display:flex; align-items:center; gap:9px; margin:4px 0 14px}
 .live-sec-head h2{font-size:20px; font-weight:800; margin:0; letter-spacing:-.3px}
@@ -462,6 +672,8 @@ html[data-hatch-target="tv"] #liveSection{display:none}
 @media (prefers-reduced-motion: reduce){
   .live-dot{animation:none}
   .sidebar{transition:none}
+  .card,.view-in,.watch.open,.panel.open,.skel .sk-thumb,.tg-spinner{animation:none}
+  .chip,.tg-pill,.tg-card,.pill-btn,.nav-item,.tg-controls{transition:none}
 }
 
 /* ---------- TV target (design 21, 960x540, D-pad) ---------- */
@@ -479,8 +691,9 @@ html[data-hatch-target="tv"] .sidebar .nav-head{font-size:12px; padding:2px 10px
 html[data-hatch-target="tv"] .sidebar .nav-sep{margin:3px 0}
 html[data-hatch-target="tv"] .sidebar .nav-note{display:none}
 html[data-hatch-target="tv"] .main{overflow:hidden; height:430px; padding:0 0 6px 6px}
-html[data-hatch-target="tv"] .grid{grid-template-columns:repeat(4,1fr); gap:12px}
-html[data-hatch-target="tv"] .card{padding:2px}
+html[data-hatch-target="tv"] .grid{grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px}
+html[data-hatch-target="tv"] .card{padding:2px; min-width:0}
+html[data-hatch-target="tv"] .card-meta{min-width:0}
 html[data-hatch-target="tv"] .card-meta{padding-top:6px; gap:7px}
 html[data-hatch-target="tv"] .card-ava{width:28px;height:28px;font-size:12px}
 html[data-hatch-target="tv"] .card-name{font-size:13.5px; -webkit-line-clamp:1}
@@ -570,7 +783,14 @@ html[data-hatch-target="tv"] .watch{height:100%; overflow:hidden}
         <h1 class="feed-title" id="feedTitle">সব চ্যানেল</h1>
         <span class="feed-sub" id="feedSub"></span>
       </div>
-      <div class="grid" id="grid"></div>
+      <div class="grid" id="grid">
+        <div class="skel" aria-hidden="true"><div class="sk-thumb"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
+        <div class="skel" aria-hidden="true"><div class="sk-thumb"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
+        <div class="skel" aria-hidden="true"><div class="sk-thumb"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
+        <div class="skel" aria-hidden="true"><div class="sk-thumb"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
+        <div class="skel" aria-hidden="true"><div class="sk-thumb"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
+        <div class="skel" aria-hidden="true"><div class="sk-thumb"></div><div class="sk-line"></div><div class="sk-line short"></div></div>
+      </div>
       <div class="pager" id="pager">
         <button id="pgPrev">‹ আগের পেজ</button>
         <span class="pg-info" id="pgInfo"></span>
@@ -586,43 +806,74 @@ html[data-hatch-target="tv"] .watch{height:100%; overflow:hidden}
         <span id="backTxt">সব চ্যানেল</span>
       </button>
       <div class="watch-grid">
-        <div>
-          <div class="player-wrap">
-            <video id="player" controls playsinline></video>
+        <div class="watch-left">
+          <div class="player-wrap" id="playerWrap">
+            <video id="player" playsinline></video>
             <iframe id="ytFrame" title="YouTube প্লেয়ার" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <div class="tg-empty show" id="tgEmpty">
+              <span class="tg-empty-icon"><svg viewBox="0 0 24 24"><path d="M21 3H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5v2h8v-2h5a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 14H3V5h18v12z"/></svg></span>
+              <h3>No Channel Selected</h3>
+              <p>Select a Channel to Start Watching</p>
+              <div class="tg-empty-btns">
+                <button class="tg-btn-ghost" id="tgBrowseBtn">Browse Channels</button>
+                <button class="tg-btn-red" id="tgWatchFreeBtn">Watch Free Live TV</button>
+              </div>
+            </div>
+            <div class="tg-loading" id="tgLoading">
+              <div class="tg-spinner"></div>
+              <div class="tg-load-title">RAHMAN TV LOADING…</div>
+              <div class="tg-load-sub" id="tgLoadSub">Connecting Server 1</div>
+            </div>
+            <div class="tg-controls" id="tgControls">
+              <div class="tg-time-row"><span id="tgCurTime">0:00</span><span id="tgEndTime">0:00</span></div>
+              <div class="tg-seek" id="tgSeek" role="slider" aria-label="সিক বার" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="tg-seek-track"><div class="tg-seek-played" id="tgSeekPlayed"></div></div>
+                <div class="tg-seek-thumb" id="tgSeekThumb"></div>
+              </div>
+              <div class="tg-btn-row">
+                <button class="tg-ctl-btn" id="tgPlayBtn" aria-label="চালান / থামান"><svg viewBox="0 0 24 24" id="tgPlayIcon"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg></button>
+                <button class="tg-ctl-btn" id="tgMuteBtn" aria-label="শব্দ বন্ধ / চালু"><svg viewBox="0 0 24 24" id="tgMuteIcon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>
+                <span class="tg-spacer"></span>
+                <div class="tg-q-wrap">
+                  <button class="tg-q-btn" id="tgQualityBtn">Auto</button>
+                  <div class="tg-q-menu" id="tgQMenu"></div>
+                </div>
+                <button class="tg-ctl-btn" id="tgFsBtn" aria-label="ফুলস্ক্রিন"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
+              </div>
+            </div>
             <div class="player-msg" id="playerMsg"></div>
           </div>
-          <h2 class="watch-title" id="watchTitle"></h2>
-          <p class="watch-sub" id="watchSub"></p>
-          <div class="watch-actions">
-            <button class="pill-btn" id="favBtn">
-              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              <span id="favBtnTxt">পছন্দে যোগ করুন</span>
-            </button>
-            <button class="pill-btn" id="retryBtn">
-              <svg viewBox="0 0 24 24"><path d="M17.65 6.35A8 8 0 1 0 19.73 14h-2.08a6 6 0 1 1-1.41-6.24L13 11h7V4l-2.35 2.35z"/></svg>
-              আবার চেষ্টা
-            </button>
-            <button class="pill-btn primary" id="nextBtn">
-              <span id="nextTxt">পরের চ্যানেল</span>
-              <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6h2v12h-2z"/></svg>
-            </button>
-            <a class="pill-btn" id="ytLink" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none">
-              <svg viewBox="0 0 24 24"><path d="M21.58 7.19a2.77 2.77 0 0 0-1.95-1.96C17.9 4.75 12 4.75 12 4.75s-5.9 0-7.63.48a2.77 2.77 0 0 0-1.95 1.96A29.3 29.3 0 0 0 2 12a29.3 29.3 0 0 0 .42 4.81 2.77 2.77 0 0 0 1.95 1.96c1.73.48 7.63.48 7.63.48s5.9 0 7.63-.48a2.77 2.77 0 0 0 1.95-1.96A29.3 29.3 0 0 0 22 12a29.3 29.3 0 0 0-.42-4.81zM10 15.25v-6.5L15.5 12 10 15.25z"/></svg>
-              YouTube-এ খুলুন
-            </a>
-          </div>
-          <div class="chan-row">
-            <span class="card-ava" id="chanAva"></span>
-            <div>
-              <div class="nm" id="chanName"></div>
-              <div class="sb" id="chanSub"></div>
+          <div class="tg-pills" id="tgPills"></div>
+          <div class="tg-title-block">
+            <div class="tg-tv-icon">TV</div>
+            <div class="tg-title-txt">
+              <h2 id="watchTitle"></h2>
+              <p id="watchSub"></p>
+            </div>
+            <button class="tg-fav" id="favBtn" aria-label="পছন্দে যোগ করুন"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+            <div class="tg-stats">
+              <div class="tg-stat"><span class="tg-stat-label">Network Speed</span><span class="tg-stat-val" id="tgSpeed">—</span></div>
+              <div class="tg-stat"><span class="tg-stat-label">Video Data Used</span><span class="tg-stat-val" id="tgData">0 MB</span></div>
             </div>
           </div>
+          <a class="tg-yt-link" id="ytLink" href="#" target="_blank" rel="noopener" style="display:none">YouTube-এ খুলুন ›</a>
         </div>
-        <div>
-          <h3 class="upnext-head">Up Next · এরপর যা চলছে</h3>
-          <div id="upNext"></div>
+        <div class="watch-right">
+          <div class="tg-search-row">
+            <div class="tg-search">
+              <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+              <input id="tgSearchInput" type="search" placeholder="Search channels, movies…" autocomplete="off" aria-label="ক্যাটালগে খুঁজুন" />
+            </div>
+            <div class="tg-filter-wrap">
+              <button class="tg-filter-btn" id="tgFilterBtn"><svg viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>Filter</button>
+              <div class="tg-filter-menu" id="tgFilterMenu">
+                <button data-tgf="all" class="sel">সবকিছু</button>
+                <button data-tgf="live">শুধু লাইভ</button>
+                <button data-tgf="fav">শুধু পছন্দের</button>
+              </div>
+            </div>
+          </div>
+          <div id="tgSections"></div>
         </div>
       </div>
     </section>
@@ -641,7 +892,7 @@ html[data-hatch-target="tv"] .watch{height:100%; overflow:hidden}
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEc0lEQVR4nO3bSXIbSRREwQSt739l9EJGGiFhqCGzcgj3A5BYxMMvgNKtDOZeyr33a6CdWym33q/ht64vxtgppW8Ul/9io+edq2O47JcZPntcFULzX2L4nNE6hGY/3PCpqVUI1X+o4dNS7RC+av4w46e12hurUpPh00ONa3D6Ahg/vdTY3qkAjJ/ezm7wcADGzyjObPFQAMbPaI5ucncAxs+ojmxzVwDGz+j2bnRzAMbPLPZsdVMAxs9stm72YwDGz6y2bLfqP4WA2bwNwLs/s/u04ZcBGD+reLdlj0BEexqAd39W82rTLgDR/gnAuz+rerZtF4BoDwF492d1f2/cBSDaTwDe/Unxe+suANEEQLSvUjz+kOd78y4A0QRANAEQTQBEu/kATDIXgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCeuftfoikE8Mr9LoQAAvhEBEsTwBauwbIEsIcIliOAvVyDpQjgKCEsQQBniWBqAqjBNZiWAGoSwXQEUJtrMBUBtCKCKQigJddgeAK4ghCGJYAriWA4AriaazAUAfQigiEIoCfXoDsBjEAI3QhgJCK4nABG4xpcSgCjEsElBDAy16A5AcxABM0IYBauQRMCmI0QqhLArERQhQBm5hqcJoAViOAwAazCNThEAKsRwi4CWJUINhHAylyDjwSQQAQvCSCFa/CUANKI4IEAErkGPwSQTAgCoERHIAD+CL0GAuBRWAQC4F9B1+C/3i+AAd1uvV/BZVwAHgWNvxQXgG9hw/8mgHShw//mEShZ+PhLcQEyGf4PFyCN8T9wAVIY/lMCWJ3hv+URaGXG/5ELsCLD30wAKzH83TwCrcL4D3EBZmf4p7gAMzP+01yAGRl+NQKYieFX5xFoFsbfhAswOsNvSgCjMvxLeAQakfFfxgUYieFfzgUYhfF34QL0ZvhdCaAXwx+CR6AejH8YLsCVDH84AriC4Q/LI1Brxj80F6AVw5+CC9CC8U/DBajJ8KcjgBoMf1oegc4y/qm5AEcZ/hIEsJfhL8Uj0B7GvxwXYAvDX5YL8InxL80FeMXwI7gAzxh/DAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAET7upXi//8R6VbKzQUgmgCIJgCiCYBoX6X8+TDQ+4XAlb437wIQTQBE+wnAYxApfm/dBSDaQwCuAKv7e+MuANH+CcAVYFXPtu0CEO1pAK4Aq3m1aReAaC8DcAVYxbstv70AImB2nzbsEYhoHwNwBZjVlu1uugAiYDZbN7v5EUgEzGLPVnd9BhABo9u70d0fgkXAqI5s89C3QCJgNEc3efhrUBEwijNbPPV3ABHQ29kNnv5DmAjopcb2qo73Xsq95s+DZ2q+6Vb9pxCuAa3V3lizwboG1NTqzbX5O7YQOKP1U8VljyxCYI+rHqcvf2YXAu9c/Tmy64dWMVBK3y9PhvvWRhRrG+2bwv8BZr3pc/VlkV8AAAAASUVORK5CYII=" alt="RAHMAN TV অ্যাপ আইকন" />
         <div>
           <p class="ac-name">RAHMAN TV</p>
-          <p class="ac-sub">সংস্করণ <b id="appVerTxt">2.0</b> • লাইভ টিভি, মুভি ও বাংলা নাটক<br/><span id="installStateTxt">এই ব্রাউজারে চলছে — ইনস্টল করলে হোম স্ক্রিন থেকে এক ট্যাপে খুলবে।</span></p>
+          <p class="ac-sub">সংস্করণ <b id="appVerTxt">2.1</b> • লাইভ টিভি, মুভি ও বাংলা নাটক<br/><span id="installStateTxt">এই ব্রাউজারে চলছে — ইনস্টল করলে হোম স্ক্রিন থেকে এক ট্যাপে খুলবে।</span></p>
         </div>
         <div class="ac-actions">
           <button class="pill-btn primary" id="panelInstallBtn">
@@ -913,14 +1164,14 @@ function cardHTML(it){
   var thumbInner, avaInner;
   if(it.kind==="movie" || it.kind==="natok"){
     thumbInner = it.thumb
-      ? '<img class="poster" src="'+esc(it.thumb)+'" alt="" loading="lazy" onerror="this.remove()" /><span class="initial">'+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'</span>'
+      ? '<img class="poster" src="'+esc(it.thumb)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()" /><span class="initial">'+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'</span>'
       : '<span class="initial">'+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'</span>';
     avaInner = esc(it.title.trim().charAt(0).toUpperCase()||"R");
   } else {
     thumbInner = it.logo
-      ? '<img class="logo" src="'+esc(it.logo)+'" alt="" loading="lazy" onerror="this.remove()" /><span class="initial" style="display:none">'+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'</span>'
+      ? '<img class="logo" src="'+esc(it.logo)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()" /><span class="initial" style="display:none">'+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'</span>'
       : '<span class="initial">'+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'</span>';
-    avaInner = it.logo ? '<img src="'+esc(it.logo)+'" alt="" loading="lazy" onerror="this.parentNode.textContent=\''+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'\'" />' : esc(it.title.trim().charAt(0).toUpperCase()||"R");
+    avaInner = it.logo ? '<img src="'+esc(it.logo)+'" alt="" loading="lazy" decoding="async" onerror="this.parentNode.textContent=\''+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'\'" />' : esc(it.title.trim().charAt(0).toUpperCase()||"R");
   }
   var badge = "";
   if(live) badge = '<span class="badge-live"><i></i>LIVE</span>';
@@ -941,6 +1192,43 @@ function cardHTML(it){
     + '<span class="card-sub" style="display:block">'+sub+'</span></span>'
     + '<span class="dots-btn" data-dots="1" role="button" aria-label="আরও অপশন"><svg viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></span>'
     + '</span></button>';
+}
+/* কার্ড বাইন্ডিং আলাদা ফাংশনে — ধাপে ধাপে (chunked) রেন্ডারের প্রতিটা অংশে আবার ব্যবহার হয় */
+var renderToken = 0;
+function bindCards(root){
+  root.querySelectorAll(".card:not([data-bound])").forEach(function(card){
+    card.setAttribute("data-bound", "1");
+    card.addEventListener("click", function(){
+      var it = findItem(card.getAttribute("data-key"));
+      if(it) playItem(it);
+    });
+    var dots = card.querySelector("[data-dots]");
+    if(dots){
+      dots.addEventListener("click", function(e){
+        e.stopPropagation();
+        var it = findItem(card.getAttribute("data-key"));
+        if(it) openCardMenu(it, dots);
+      });
+    }
+    var img = card.querySelector(".thumb img.logo");
+    var ini = card.querySelector(".thumb .initial");
+    if(img && ini){
+      img.addEventListener("load", function(){ ini.style.display="none"; });
+      img.addEventListener("error", function(){ ini.style.display=""; });
+      if(img.complete && img.naturalWidth) ini.style.display="none";
+    }
+    var poster = card.querySelector(".thumb img.poster");
+    if(poster && ini){
+      poster.addEventListener("load", function(){ ini.style.display="none"; });
+      if(poster.complete && poster.naturalWidth) ini.style.display="none";
+    }
+  });
+}
+function animateIn(el){
+  if(!el || isTV) return;
+  el.classList.remove("view-in");
+  void el.offsetWidth;
+  el.classList.add("view-in");
 }
 function renderFeed(focusFirst){
   renderNav(); renderChips();
@@ -977,38 +1265,39 @@ function renderFeed(focusFirst){
   } else {
     pager.classList.remove("show");
   }
-  grid.innerHTML = showList.length ? showList.map(cardHTML).join("") :
-    '<div class="empty" style="grid-column:1/-1"><b>কিছু পাওয়া যায়নি</b>'
-    + (state.view==="fav" ? "এখনো কিছু পছন্দে যোগ করা হয়নি — প্লেয়ার পেজ থেকে হার্ট বাটনে যোগ করুন।"
-      : state.view==="history" ? "এই সেশনে এখনো কিছু দেখা হয়নি।"
-      : "অন্য নামে খুঁজে দেখুন, বা অন্য ক্যাটাগরি বেছে নিন।")
-    + '</div>';
-  document.getElementById("feedView").querySelectorAll(".card").forEach(function(card){
-    card.addEventListener("click", function(){
-      var it = findItem(card.getAttribute("data-key"));
-      if(it) playItem(it);
-    });
-    var dots = card.querySelector("[data-dots]");
-    if(dots){
-      dots.addEventListener("click", function(e){
-        e.stopPropagation();
-        var it = findItem(card.getAttribute("data-key"));
-        if(it) openCardMenu(it, dots);
-      });
-    }
-    var img = card.querySelector(".thumb img.logo");
-    var ini = card.querySelector(".thumb .initial");
-    if(img && ini){
-      img.addEventListener("load", function(){ ini.style.display="none"; });
-      img.addEventListener("error", function(){ ini.style.display=""; });
-      if(img.complete && img.naturalWidth) ini.style.display="none";
-    }
-    var poster = card.querySelector(".thumb img.poster");
-    if(poster && ini){
-      poster.addEventListener("load", function(){ ini.style.display="none"; });
-      if(poster.complete && poster.naturalWidth) ini.style.display="none";
-    }
-  });
+  /* ধাপে ধাপে রেন্ডার: প্রথম ৪৮টা কার্ড সাথে সাথে, বাকিগুলো idle সময়ে অংশে অংশে —
+     ৩০০+ কার্ড একবারে বসালে কমদামি ফোনে পেজ আটকে যেত */
+  renderToken++;
+  var myToken = renderToken;
+  var CHUNK = 48;
+  if(!showList.length){
+    grid.innerHTML =
+      '<div class="empty" style="grid-column:1/-1"><b>কিছু পাওয়া যায়নি</b>'
+      + (state.view==="fav" ? "এখনো কিছু পছন্দে যোগ করা হয়নি — প্লেয়ার পেজ থেকে হার্ট বাটনে যোগ করুন।"
+        : state.view==="history" ? "এই সেশনে এখনো কিছু দেখা হয়নি।"
+        : "অন্য নামে খুঁজে দেখুন, বা অন্য ক্যাটাগরি বেছে নিন।")
+      + '</div>';
+  } else if(isTV || showList.length <= CHUNK){
+    grid.innerHTML = showList.map(cardHTML).join("");
+  } else {
+    grid.innerHTML = showList.slice(0, CHUNK).map(cardHTML).join("");
+    var chunkIdx = CHUNK;
+    var stepChunk = function(){
+      if(myToken !== renderToken) return;
+      var slice = showList.slice(chunkIdx, chunkIdx + CHUNK);
+      if(!slice.length) return;
+      grid.insertAdjacentHTML("beforeend", slice.map(cardHTML).join(""));
+      bindCards(grid);
+      chunkIdx += CHUNK;
+      if(chunkIdx < showList.length){
+        if(window.requestIdleCallback) requestIdleCallback(stepChunk, { timeout: 150 });
+        else requestAnimationFrame(stepChunk);
+      }
+    };
+    if(window.requestIdleCallback) requestIdleCallback(stepChunk, { timeout: 150 });
+    else requestAnimationFrame(stepChunk);
+  }
+  bindCards(document.getElementById("feedView"));
   if(isTV && focusFirst){
     var first = grid.querySelector(".card") || document.querySelector(".nav-item");
     if(first) first.focus();
@@ -1038,6 +1327,7 @@ function showFeed(){
   feedView.style.display = "";
   stopPlayer();
   window.scrollTo(0,0);
+  animateIn(feedView);
 }
 function stopPlayer(){
   if(hls){ try{ hls.destroy(); }catch(e){} hls = null; }
@@ -1047,8 +1337,22 @@ function stopPlayer(){
   ytFrame.removeAttribute("src");
   ytFrame.style.display = "none";
   playerMsg.classList.remove("show");
+  /* Teleghor প্লেয়ার অবস্থা রিসেট: কন্ট্রোল লুকানো, খালি অবস্থা, স্ট্যাটস বন্ধ */
+  var pw = document.getElementById("playerWrap");
+  if(pw) pw.classList.remove("is-yt", "tg-idle");
+  var tc = document.getElementById("tgControls");
+  if(tc) tc.classList.remove("show");
+  var te = document.getElementById("tgEmpty");
+  if(te) te.classList.add("show");
+  var qb = document.getElementById("tgQualityBtn");
+  if(qb) qb.textContent = "Auto";
+  var qm = document.getElementById("tgQMenu");
+  if(qm){ qm.innerHTML = ""; qm.classList.remove("open"); }
+  hideLoading();
+  stopStats();
 }
 function showPlayerError(fmt){
+  hideLoading();
   var extra = fmt==="mkv" ? "<br/>MKV ফরম্যাট সব ব্রাউজারে চলে না — Chrome/Edge-এ চেষ্টা করুন।" : "";
   playerMsg.innerHTML = '<div>এই ভিডিওটি এখন ব্রাউজারে চালানো যাচ্ছে না।<br/>নেটওয়ার্ক বা সার্ভারের কারণে এমন হতে পারে — আবার চেষ্টা করুন, বা অন্য কিছু চালান।'+extra+'<br/><button id="pmRetry">আবার চেষ্টা</button></div>';
   playerMsg.classList.add("show");
@@ -1058,11 +1362,16 @@ function showPlayerError(fmt){
 function startStream(it){
   stopPlayer();
   if(it.kind==="natok"){
+    playerWrap.classList.add("is-yt");
     player.style.display = "none";
     ytFrame.style.display = "block";
     ytFrame.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(it.yt) + "?autoplay=1&rel=0";
     return;
   }
+  playerWrap.classList.remove("is-yt");
+  tgEmpty.classList.remove("show");
+  showLoading("Connecting Server 1");
+  startStats();
   var url = it.url;
   var fmt = it.fmt || detectFormat(url);
   if(fmt==="hls"){
@@ -1070,7 +1379,10 @@ function startStream(it){
       hls = new Hls({ maxBufferLength: 30 });
       hls.loadSource(url);
       hls.attachMedia(player);
-      hls.on(Hls.Events.MANIFEST_PARSED, function(){ player.play().catch(function(){}); });
+      hls.on(Hls.Events.MANIFEST_PARSED, function(){ buildHlsQualityMenu(); player.play().catch(function(){}); });
+      hls.on(Hls.Events.FRAG_LOADED, function(ev, data){
+        if(data && data.stats && data.stats.loaded) statBytes += data.stats.loaded;
+      });
       hls.on(Hls.Events.ERROR, function(ev, data){ if(data && data.fatal) showPlayerError(fmt); });
     } else if(player.canPlayType("application/vnd.apple.mpegurl")){
       player.src = url;
@@ -1082,6 +1394,12 @@ function startStream(it){
       dashPlayer = dashjs.MediaPlayer().create();
       dashPlayer.initialize(player, url, true);
       dashPlayer.on(dashjs.MediaPlayer.events.ERROR, function(){ showPlayerError(fmt); });
+      try{
+        dashPlayer.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, function(e){
+          if(e && e.request && e.request.bytesLoaded) statBytes += e.request.bytesLoaded;
+        });
+        dashPlayer.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, function(){ buildDashQualityMenu(); });
+      }catch(e2){}
     } else showPlayerError(fmt);
   } else {
     /* mp4 / mkv / webm / mov — নেটিভ <video> */
@@ -1106,84 +1424,415 @@ function playItem(it){
   watchView.classList.add("open");
   window.scrollTo(0,0);
   document.getElementById("watchTitle").textContent = it.title;
-  var fmtTxt = it.kind==="natok" ? "YouTube embed" : (FMT_LABEL[it.fmt] || "নেটিভ প্লেয়ার");
   document.getElementById("watchSub").textContent =
-    (it.kind==="channel" ? groupBn(it.group) + (isLiveItem(it) ? " • LIVE চলছে" : " • লাইভ টিভি")
-      : it.kind==="movie" ? "মুভি • " + it.meta
-      : "বাংলা নাটক • " + it.meta)
-    + " • ফরম্যাট: " + fmtTxt;
-  var ava = document.getElementById("chanAva");
-  ava.style.setProperty("--h", hue(it.title));
-  ava.innerHTML = it.logo ? '<img src="'+esc(it.logo)+'" alt="" onerror="this.parentNode.textContent=\''+esc(it.title.trim().charAt(0).toUpperCase()||"R")+'\'" />' : esc(it.title.trim().charAt(0).toUpperCase()||"R");
-  document.getElementById("chanName").textContent = it.title;
-  document.getElementById("chanSub").textContent = "RAHMAN TV • " + (it.kind==="channel" ? groupBn(it.group)+" চ্যানেল" : it.kind==="movie" ? "মুভি • "+it.meta : "নাটক • "+it.meta);
+    it.kind==="channel" ? it.group + " • Streaming"
+      : it.kind==="movie" ? "Movies • Streaming"
+      : (it.meta.split(" • ")[0] || "বাংলা নাটক") + " • Streaming";
   var ytLink = document.getElementById("ytLink");
   if(it.kind==="natok"){ ytLink.style.display=""; ytLink.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(it.yt); }
   else ytLink.style.display="none";
   document.getElementById("backTxt").textContent = it.kind==="movie" ? "সব মুভি" : it.kind==="natok" ? "সব নাটক" : "সব চ্যানেল";
-  document.getElementById("nextTxt").textContent = it.kind==="channel" ? "পরের চ্যানেল" : "পরেরটি";
   updateFavBtn();
   historyItems = historyItems.filter(function(x){ return x.key!==it.key; });
   historyItems.unshift(it);
   if(historyItems.length > 40) historyItems = historyItems.slice(0,40);
-  renderUpNext(it);
+  renderTgPills();
+  renderTgSections();
   startStream(it);
+  updatePlayIcon();
+  showControls(true);
   renderNav();
   if(isTV){ document.getElementById("backBtn").focus(); }
 }
-function renderUpNext(it){
-  var list = siblingList(it).filter(function(x){ return x.key!==it.key; });
-  if(it.kind==="channel"){
-    var same = list.filter(function(x){ return x.group===it.group; });
-    var rest = list.filter(function(x){ return x.group!==it.group; });
-    list = same.concat(rest);
-  }
-  list = list.slice(0, isTV ? 4 : 12);
-  document.getElementById("upNext").innerHTML = list.map(function(x){
-    var h = hue(x.title);
-    var thumb = "";
-    if(x.kind==="channel"){
-      thumb = x.logo ? '<img src="'+esc(x.logo)+'" alt="" loading="lazy" onerror="this.remove()" />' : '<span class="initial">'+esc(x.title.trim().charAt(0).toUpperCase()||"R")+'</span>';
-    } else if(x.thumb){
-      thumb = '<img class="poster" src="'+esc(x.thumb)+'" alt="" loading="lazy" onerror="this.remove()" /><span class="initial">'+esc(x.title.trim().charAt(0).toUpperCase()||"R")+'</span>';
-    } else {
-      thumb = '<span class="initial">'+esc(x.title.trim().charAt(0).toUpperCase()||"R")+'</span>';
-    }
-    var sub = x.kind==="channel" ? esc(groupBn(x.group))+" • লাইভ টিভি" : esc(x.meta);
-    return '<button class="up-row" data-key="'+esc(x.key)+'">'
-      + '<span class="up-thumb" style="--h:'+h+'">' + thumb
-      + (isLiveItem(x) ? '<span class="badge-live" style="left:5px;bottom:5px;top:auto"><i></i>LIVE</span>' : "")
-      + '</span>'
-      + '<span class="up-txt"><span class="up-name">'+esc(x.title)+'</span>'
-      + '<span class="up-sub" style="display:block">'+sub+'</span></span></button>';
-  }).join("");
-  document.querySelectorAll(".up-row").forEach(function(r){
-    r.addEventListener("click", function(){
-      var x = findItem(r.getAttribute("data-key"));
-      if(x) playItem(x);
-    });
-  });
-}
 function updateFavBtn(){
   var on = current && favorites[current.key];
-  document.getElementById("favBtn").classList.toggle("on", !!on);
-  document.getElementById("favBtnTxt").textContent = on ? "পছন্দে আছে" : "পছন্দে যোগ করুন";
+  var b = document.getElementById("favBtn");
+  b.classList.toggle("on", !!on);
+  b.setAttribute("aria-label", on ? "পছন্দ থেকে সরান" : "পছন্দে যোগ করুন");
 }
 document.getElementById("favBtn").addEventListener("click", function(){
   if(!current) return;
   if(favorites[current.key]) delete favorites[current.key]; else favorites[current.key] = true;
-  updateFavBtn(); renderNav();
-});
-document.getElementById("retryBtn").addEventListener("click", function(){ if(current) startStream(current); });
-document.getElementById("nextBtn").addEventListener("click", function(){
-  if(!current) return;
-  var list = siblingList(current);
-  var i = -1;
-  list.forEach(function(x, idx){ if(x.key===current.key) i = idx; });
-  var nxt = list[(i+1) % list.length];
-  if(nxt) playItem(nxt);
+  updateFavBtn(); renderNav(); renderTgSections();
 });
 document.getElementById("backBtn").addEventListener("click", function(){ showFeed(); renderFeed(false); });
+
+/* ---------- Teleghor-স্টাইল প্লেয়ার: কাস্টম কন্ট্রোল, স্ট্যাটস, পিল, ক্যাটালগ ---------- */
+var playerWrap = document.getElementById("playerWrap");
+var tgEmpty = document.getElementById("tgEmpty");
+var tgLoading = document.getElementById("tgLoading");
+var tgLoadSub = document.getElementById("tgLoadSub");
+var tgControls = document.getElementById("tgControls");
+var tgCurTime = document.getElementById("tgCurTime");
+var tgEndTime = document.getElementById("tgEndTime");
+var tgSeek = document.getElementById("tgSeek");
+var tgSeekPlayed = document.getElementById("tgSeekPlayed");
+var tgSeekThumb = document.getElementById("tgSeekThumb");
+var tgPlayBtn = document.getElementById("tgPlayBtn");
+var tgPlayIcon = document.getElementById("tgPlayIcon");
+var tgMuteBtn = document.getElementById("tgMuteBtn");
+var tgMuteIcon = document.getElementById("tgMuteIcon");
+var tgQualityBtn = document.getElementById("tgQualityBtn");
+var tgQMenu = document.getElementById("tgQMenu");
+var tgFsBtn = document.getElementById("tgFsBtn");
+var tgPills = document.getElementById("tgPills");
+var tgSections = document.getElementById("tgSections");
+var tgSearchInput = document.getElementById("tgSearchInput");
+var tgFilterBtn = document.getElementById("tgFilterBtn");
+var tgFilterMenu = document.getElementById("tgFilterMenu");
+var tgSpeed = document.getElementById("tgSpeed");
+var tgData = document.getElementById("tgData");
+
+function showLoading(sub){
+  if(sub) tgLoadSub.textContent = sub;
+  tgLoading.classList.add("show");
+}
+function hideLoading(){ tgLoading.classList.remove("show"); }
+
+/* ----- লাইভ স্ট্যাটস: আসল মাপা মান (hls.js / dash.js থেকে) — কোনো অনুমান নয় ----- */
+var statBytes = 0, statTimer = null;
+function fmtBytes(b){
+  if(!b || b <= 0) return "0 MB";
+  var mb = b / 1048576;
+  if(mb < 1024) return mb.toFixed(1) + " MB";
+  return (b / 1073741824).toFixed(2) + " GB";
+}
+function updateStatsUI(){
+  var sp = 0;
+  if(hls && hls.bandwidthEstimate) sp = hls.bandwidthEstimate;
+  else if(dashPlayer){ try{ sp = dashPlayer.getAverageThroughput("video", true) * 1000; }catch(e){} }
+  tgSpeed.textContent = sp > 0 ? (sp / 1000000).toFixed(2) + " Mbps" : "—";
+  tgData.textContent = fmtBytes(statBytes);
+}
+function startStats(){
+  stopStats();
+  statBytes = 0;
+  updateStatsUI();
+  statTimer = setInterval(function(){ updateStatsUI(); refreshTgTime(); }, 1000);
+}
+function stopStats(){
+  if(statTimer){ clearInterval(statTimer); statTimer = null; }
+  var s = document.getElementById("tgSpeed"); if(s) s.textContent = "—";
+  var d = document.getElementById("tgData"); if(d) d.textContent = "0 MB";
+}
+
+/* ----- কাস্টম কন্ট্রোল বার ----- */
+var ICON_PLAY = "M8 5.5v13l11-6.5-11-6.5z";
+var ICON_PAUSE = "M6 5h4v14H6zM14 5h4v14h-4z";
+var ICON_VOL = "M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z";
+var ICON_MUTE = "M3 9v6h4l5 5V4L7 9H3zm14.6 3l2.5-2.5-1.4-1.4-2.5 2.5-2.5-2.5-1.4 1.4L14.8 12l-2.5 2.5 1.4 1.4 2.5-2.5 2.5 2.5 1.4-1.4L17.6 12z";
+function updatePlayIcon(){
+  tgPlayIcon.innerHTML = '<path d="' + (player.paused ? ICON_PLAY : ICON_PAUSE) + '"/>';
+}
+function updateMuteIcon(){
+  tgMuteIcon.innerHTML = '<path d="' + ((player.muted || player.volume === 0) ? ICON_MUTE : ICON_VOL) + '"/>';
+}
+var ctlHideTimer = null;
+function showControls(sticky){
+  if(!current || current.kind === "natok") return;
+  tgControls.classList.add("show");
+  playerWrap.classList.remove("tg-idle");
+  clearTimeout(ctlHideTimer);
+  if(!sticky && !player.paused){
+    ctlHideTimer = setTimeout(function(){
+      tgControls.classList.remove("show");
+      playerWrap.classList.add("tg-idle");
+    }, 2800);
+  }
+}
+function scheduleHideControls(){ showControls(false); }
+playerWrap.addEventListener("pointermove", function(){ showControls(false); });
+playerWrap.addEventListener("pointerdown", function(){ showControls(false); });
+player.addEventListener("click", function(){
+  if(player.paused) player.play().catch(function(){}); else player.pause();
+});
+tgPlayBtn.addEventListener("click", function(){
+  if(player.paused) player.play().catch(function(){}); else player.pause();
+});
+tgMuteBtn.addEventListener("click", function(){ player.muted = !player.muted; updateMuteIcon(); });
+tgFsBtn.addEventListener("click", function(){
+  try{
+    if(document.fullscreenElement) document.exitFullscreen();
+    else if(playerWrap.requestFullscreen) playerWrap.requestFullscreen();
+    else if(player.webkitEnterFullscreen) player.webkitEnterFullscreen();
+  }catch(e){}
+});
+player.addEventListener("playing", function(){
+  hideLoading();
+  tgEmpty.classList.remove("show");
+  updatePlayIcon();
+  scheduleHideControls();
+});
+player.addEventListener("canplay", function(){ hideLoading(); });
+player.addEventListener("waiting", function(){
+  if(current && current.kind !== "natok") showLoading("Buffering…");
+});
+player.addEventListener("pause", function(){ updatePlayIcon(); showControls(true); });
+player.addEventListener("play", function(){ updatePlayIcon(); scheduleHideControls(); });
+player.addEventListener("volumechange", updateMuteIcon);
+player.addEventListener("timeupdate", refreshTgTime);
+player.addEventListener("loadedmetadata", refreshTgTime);
+
+/* ----- টাইম রো + সিক বার ----- */
+function fmtT(s){
+  if(!isFinite(s) || s < 0) s = 0;
+  s = Math.floor(s);
+  var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
+  var mm = h ? ("0" + m).slice(-2) : String(m);
+  return (h ? h + ":" : "") + mm + ":" + ("0" + ss).slice(-2);
+}
+function seekRange(){
+  var start = 0, end = 0;
+  try{
+    if(player.seekable && player.seekable.length){
+      start = player.seekable.start(0);
+      end = player.seekable.end(player.seekable.length - 1);
+    } else if(isFinite(player.duration)) end = player.duration;
+  }catch(e){}
+  return [start, end];
+}
+function refreshTgTime(){
+  if(!current || current.kind === "natok") return;
+  var r = seekRange();
+  var cur = player.currentTime || 0;
+  tgCurTime.textContent = fmtT(cur);
+  tgEndTime.textContent = fmtT(r[1]);
+  var f = r[1] > r[0] ? (cur - r[0]) / (r[1] - r[0]) : 0;
+  f = Math.max(0, Math.min(1, f));
+  tgSeekPlayed.style.width = (f * 100) + "%";
+  tgSeekThumb.style.left = (f * 100) + "%";
+  tgSeek.setAttribute("aria-valuenow", Math.round(f * 100));
+}
+var tgSeeking = false;
+function tgSeekTo(clientX){
+  var rect = tgSeek.getBoundingClientRect();
+  if(!rect.width) return;
+  var f = (clientX - rect.left) / rect.width;
+  f = Math.max(0, Math.min(1, f));
+  var r = seekRange();
+  if(r[1] > r[0]){
+    try{ player.currentTime = r[0] + f * (r[1] - r[0]); }catch(e){}
+    refreshTgTime();
+  }
+}
+tgSeek.addEventListener("pointerdown", function(e){
+  tgSeeking = true;
+  try{ tgSeek.setPointerCapture(e.pointerId); }catch(err){}
+  tgSeekTo(e.clientX);
+  e.preventDefault();
+});
+tgSeek.addEventListener("pointermove", function(e){ if(tgSeeking) tgSeekTo(e.clientX); });
+tgSeek.addEventListener("pointerup", function(){ tgSeeking = false; });
+tgSeek.addEventListener("pointercancel", function(){ tgSeeking = false; });
+
+/* ----- কোয়ালিটি মেনু ("Auto" বাটন) ----- */
+function markQSel(btn){
+  Array.prototype.forEach.call(tgQMenu.children, function(c){ c.classList.remove("sel"); });
+  if(btn) btn.classList.add("sel");
+}
+function buildHlsQualityMenu(){
+  tgQMenu.innerHTML = "";
+  if(!hls || !hls.levels || !hls.levels.length) return;
+  var auto = document.createElement("button");
+  auto.textContent = "Auto";
+  if(hls.autoLevelEnabled) auto.className = "sel";
+  auto.addEventListener("click", function(){
+    if(hls) hls.currentLevel = -1;
+    tgQualityBtn.textContent = "Auto";
+    markQSel(auto);
+    tgQMenu.classList.remove("open");
+  });
+  tgQMenu.appendChild(auto);
+  hls.levels.forEach(function(lv, idx){
+    var b = document.createElement("button");
+    b.textContent = lv.height ? lv.height + "p" : Math.round(lv.bitrate / 1000) + " kbps";
+    b.addEventListener("click", function(){
+      if(hls) hls.currentLevel = idx;
+      tgQualityBtn.textContent = b.textContent;
+      markQSel(b);
+      tgQMenu.classList.remove("open");
+    });
+    tgQMenu.appendChild(b);
+  });
+}
+function buildDashQualityMenu(){
+  tgQMenu.innerHTML = "";
+  if(!dashPlayer) return;
+  var auto = document.createElement("button");
+  auto.textContent = "Auto";
+  auto.className = "sel";
+  auto.addEventListener("click", function(){
+    try{ dashPlayer.setAutoSwitchQualityFor("video", true); }catch(e){}
+    tgQualityBtn.textContent = "Auto";
+    markQSel(auto);
+    tgQMenu.classList.remove("open");
+  });
+  tgQMenu.appendChild(auto);
+  var list = [];
+  try{ list = dashPlayer.getBitrateInfoListFor("video") || []; }catch(e){}
+  list.forEach(function(q, idx){
+    var b = document.createElement("button");
+    b.textContent = q.height ? q.height + "p" : Math.round(q.bitrate / 1000) + " kbps";
+    b.addEventListener("click", function(){
+      try{ dashPlayer.setAutoSwitchQualityFor("video", false); dashPlayer.setQualityFor("video", idx); }catch(e){}
+      tgQualityBtn.textContent = b.textContent;
+      markQSel(b);
+      tgQMenu.classList.remove("open");
+    });
+    tgQMenu.appendChild(b);
+  });
+}
+tgQualityBtn.addEventListener("click", function(e){
+  e.stopPropagation();
+  if(!tgQMenu.children.length){
+    var b = document.createElement("button");
+    b.textContent = "Auto";
+    b.className = "sel";
+    b.addEventListener("click", function(){ tgQMenu.classList.remove("open"); });
+    tgQMenu.appendChild(b);
+  }
+  tgQMenu.classList.toggle("open");
+});
+
+/* ----- খালি অবস্থার বাটন ----- */
+document.getElementById("tgBrowseBtn").addEventListener("click", function(){ showFeed(); renderFeed(false); });
+document.getElementById("tgWatchFreeBtn").addEventListener("click", function(){
+  var items = channelItems();
+  var pick = items.filter(function(it){ return it.group === "Live Event"; })[0] || items[0];
+  if(pick) playItem(pick);
+});
+
+/* ----- ক্যাটাগরি পিল স্ট্রিপ ----- */
+var tgPill = "all";
+var PILL_EN = { "Live Event": "Live Events", "Movies": "Movie Channels" };
+function renderTgPills(){
+  var html = '<button class="tg-pill' + (tgPill === "all" ? ' active' : '') + '" data-tgp="all">All Channels<span class="n">' + channels.length + '</span></button>';
+  groupsPresent().forEach(function(g){
+    html += '<button class="tg-pill' + (tgPill === g ? ' active' : '') + '" data-tgp="' + esc(g) + '">' + esc(PILL_EN[g] || g) + '<span class="n">' + countOf(g) + '</span></button>';
+  });
+  html += '<button class="tg-pill' + (tgPill === "movies" ? ' active' : '') + '" data-tgp="movies">Movies<span class="n">' + MOVIE_ITEMS.length + '</span></button>';
+  html += '<button class="tg-pill' + (tgPill === "natoks" ? ' active' : '') + '" data-tgp="natoks">Natok<span class="n">' + NATOK_ITEMS.length + '</span></button>';
+  tgPills.innerHTML = html;
+  tgPills.querySelectorAll(".tg-pill").forEach(function(b){
+    b.addEventListener("click", function(){
+      tgPill = b.getAttribute("data-tgp");
+      renderTgPills();
+      renderTgSections();
+    });
+  });
+}
+
+/* ----- ডান কলামের ক্যাটালগ সেকশন ----- */
+var tgQuery = "", tgFilter = "all";
+function tgThumbInner(it){
+  var ini = esc(it.title.trim().charAt(0).toUpperCase() || "R");
+  if(it.kind !== "channel" && it.thumb)
+    return '<img class="poster" src="' + esc(it.thumb) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()" /><span class="initial">' + ini + '</span>';
+  if(it.logo)
+    return '<img class="logo" src="' + esc(it.logo) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()" /><span class="initial">' + ini + '</span>';
+  return '<span class="initial">' + ini + '</span>';
+}
+function tgCardHTML(it){
+  var sub = it.kind === "channel" ? esc(groupBn(it.group)) : esc(it.meta);
+  return '<button class="tg-card" data-key="' + esc(it.key) + '" style="--h:' + hue(it.title) + '">'
+    + '<span class="thumb">' + tgThumbInner(it)
+    + (isLiveItem(it) ? '<span class="badge-live"><i></i>LIVE</span>' : '')
+    + (it.dur ? '<span class="badge-dur">' + esc(it.dur) + '</span>' : '')
+    + '</span>'
+    + '<span class="tg-card-name">' + esc(it.title) + '</span>'
+    + '<span class="tg-card-sub" style="display:block">' + sub + '</span></button>';
+}
+function tgMatchHTML(it){
+  /* লাইভ-ইভেন্ট কার্ড: ডেটায় শুধু ম্যাচের নাম আর একটি লোগো আছে — স্কোরের কোনো
+     লাইভ ফিড নেই, তাই ভুয়া স্কোর না বসিয়ে দুই দলের নামের মাঝে VS দেখানো হয় */
+  var name = it.title.replace(/\s*live\s*\d*$/i, "").trim() || it.title;
+  var parts = name.split(/\s+vs\s+/i);
+  var mid;
+  if(parts.length === 2){
+    mid = '<span class="tg-vs"><span>' + esc(parts[0].trim()) + '</span><b>VS</b><span>' + esc(parts[1].trim()) + '</span></span>';
+  } else {
+    mid = '<span class="tg-match-name">' + esc(name) + '</span>';
+  }
+  return '<button class="tg-card tg-match" data-key="' + esc(it.key) + '">'
+    + '<span class="tg-live-pill">● LIVE</span>'
+    + (it.logo ? '<span class="tg-match-logo"><img src="' + esc(it.logo) + '" alt="" loading="lazy" decoding="async" onerror="this.parentNode.style.display=\'none\'" /></span>' : '')
+    + mid
+    + '<span class="tg-watch-btn">▶ Watch</span></button>';
+}
+function renderTgSections(){
+  var secs = [];
+  var all = channelItems();
+  var liveItems = all.filter(function(it){ return it.group === "Live Event"; });
+  var tvItems = all.filter(function(it){ return it.group !== "Live Event"; });
+  if(tgPill === "all"){
+    secs.push({ title: "Live Events", view: "Live Event", match: true, items: liveItems });
+    secs.push({ title: "Movies", view: "movies", items: MOVIE_ITEMS });
+    secs.push({ title: "Live TV Channels", view: "all", items: tvItems });
+  } else if(tgPill === "movies"){
+    secs.push({ title: "Movies", view: "movies", items: MOVIE_ITEMS });
+  } else if(tgPill === "natoks"){
+    secs.push({ title: "বাংলা নাটক", view: "natoks", items: NATOK_ITEMS });
+  } else if(tgPill === "Live Event"){
+    secs.push({ title: "Live Events", view: "Live Event", match: true, items: liveItems });
+  } else {
+    secs.push({ title: tgPill, view: tgPill, items: all.filter(function(it){ return it.group === tgPill; }) });
+  }
+  var q = tgQuery.trim().toLowerCase();
+  var html = "";
+  secs.forEach(function(s){
+    var items = s.items.slice();
+    if(tgFilter === "live") items = items.filter(isLiveItem);
+    if(tgFilter === "fav") items = items.filter(function(it){ return favorites[it.key]; });
+    if(q) items = items.filter(function(it){ return it.title.toLowerCase().indexOf(q) >= 0; });
+    if(!items.length) return;
+    html += '<div class="tg-sec"><div class="tg-sec-head"><h3>' + esc(s.title) + '</h3><span class="tg-sec-count">' + items.length + '</span>'
+      + '<button class="tg-sec-all" data-view="' + esc(s.view) + '">See all ›</button></div>'
+      + '<div class="tg-sec-line"></div><div class="tg-row">'
+      + items.map(s.match ? tgMatchHTML : tgCardHTML).join("")
+      + '</div></div>';
+  });
+  if(!html) html = '<p class="tg-none">কিছু পাওয়া যায়নি — অন্য নামে খুঁজুন বা ফিল্টার বদলান।</p>';
+  tgSections.innerHTML = html;
+  tgSections.querySelectorAll(".tg-card").forEach(function(c){
+    c.addEventListener("click", function(){
+      var it = findItem(c.getAttribute("data-key"));
+      if(it) playItem(it);
+    });
+    var img = c.querySelector(".thumb img");
+    var ini = c.querySelector(".thumb .initial");
+    if(img && ini){
+      img.addEventListener("load", function(){ ini.style.display = "none"; });
+      if(img.complete && img.naturalWidth) ini.style.display = "none";
+    }
+  });
+  tgSections.querySelectorAll(".tg-sec-all").forEach(function(b){
+    b.addEventListener("click", function(){ setView(b.getAttribute("data-view")); });
+  });
+}
+var tgSearchDebounce = null;
+tgSearchInput.addEventListener("input", function(){
+  clearTimeout(tgSearchDebounce);
+  tgSearchDebounce = setTimeout(function(){
+    tgQuery = tgSearchInput.value;
+    renderTgSections();
+  }, 150);
+});
+tgFilterBtn.addEventListener("click", function(e){
+  e.stopPropagation();
+  tgFilterMenu.classList.toggle("open");
+});
+tgFilterMenu.querySelectorAll("button").forEach(function(b){
+  b.addEventListener("click", function(){
+    tgFilter = b.getAttribute("data-tgf");
+    tgFilterMenu.querySelectorAll("button").forEach(function(x){ x.classList.toggle("sel", x === b); });
+    tgFilterMenu.classList.remove("open");
+    renderTgSections();
+  });
+});
+document.addEventListener("click", function(e){
+  if(e.target.closest && !e.target.closest(".tg-filter-wrap")) tgFilterMenu.classList.remove("open");
+  if(e.target.closest && !e.target.closest(".tg-q-wrap")) tgQMenu.classList.remove("open");
+});
 
 /* ---------- Search / header ---------- */
 function applySearch(){
@@ -1192,7 +1841,12 @@ function applySearch(){
   if(watchView.classList.contains("open") || document.getElementById("appPanel").classList.contains("open")) showFeed();
   renderFeed(false);
 }
-searchInput.addEventListener("input", applySearch);
+/* ডিবাউন্স: টাইপ থামার ১৮০ms পর একবার ফিল্টার — প্রতি অক্ষরে পুরো লিস্ট রেন্ডার নয় */
+var searchDebounce = null;
+searchInput.addEventListener("input", function(){
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(applySearch, 180);
+});
 document.getElementById("searchBtn").addEventListener("click", function(){ applySearch(); searchInput.focus(); });
 document.getElementById("brandHome").addEventListener("click", function(e){ e.preventDefault(); searchInput.value=""; state.q=""; setView("all"); });
 document.getElementById("livePill").addEventListener("click", function(){ setView("Live Event"); });
@@ -1243,7 +1897,7 @@ document.addEventListener("keydown", function(e){
   var keys = ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"];
   if(keys.indexOf(e.key) < 0) return;
   var focusables = Array.prototype.slice.call(document.querySelectorAll(
-    ".card, .nav-item, .chip, .icon-btn, .live-pill, .install-btn, .search-box input, .pill-btn, .back-btn, .up-row, .pager button, .brand, .card-menu button"
+    ".card, .nav-item, .chip, .icon-btn, .live-pill, .install-btn, .search-box input, .pill-btn, .back-btn, .pager button, .brand, .card-menu button, .tg-card, .tg-pill, .tg-ctl-btn, .tg-q-btn, .tg-sec-all, .tg-filter-btn, .tg-fav, .tg-search input, .tg-btn-ghost, .tg-btn-red, .tg-q-menu button, .tg-filter-menu button"
   )).filter(function(el){ return el.offsetParent !== null; });
   var act = document.activeElement;
   if(!act || focusables.indexOf(act) < 0) return;
@@ -1287,6 +1941,7 @@ function loadLive(manual){
         var hh = now.getHours(), mm = ("0"+now.getMinutes()).slice(-2);
         setStatus("অ্যাডমিন প্যানেল থেকে <b>লাইভ আপডেট</b> হয়েছে • মোট <b>" + bn(channels.length) + "</b>টি চ্যানেল • আজ " + bn(hh) + ":" + bn(mm) + "-এ চেক করা হয়েছে।");
         renderFeed(false);
+        if(watchView.classList.contains("open")){ renderTgPills(); renderTgSections(); }
       }
     })
     .catch(function(){
@@ -1353,8 +2008,8 @@ document.getElementById("castBtn").addEventListener("click", function(){
 });
 
 /* ---------- অ্যাপ ইনস্টল ও আপডেট (PWA) ---------- */
-var APP_VERSION = "2.0";
-var SW_TAG = "rtv-v2";
+var APP_VERSION = "2.1";
+var SW_TAG = "rtv-v3";
 var PROMPT_METHOD = "prompt";
 var appPanel = document.getElementById("appPanel");
 var deferredPrompt = null;
@@ -1463,7 +2118,7 @@ function onUpdateReady(ver){
 function checkUpdate(manual){
   var st = document.getElementById("updStatus");
   if(manual && st) st.innerHTML = "আপডেট চেক করা হচ্ছে…";
-  fetch("data:application/json;base64,eyJub3RlcyI6IuCmh+CmqOCmuOCnjeCmn+CmsuCmr+Cni+Cml+CnjeCmryDgpoXgp43gpq/gpr7gpqogKFBXQSkgKyDgpoXgp43gpq/gpr7gpqrgp4fgprAg4Kat4KeH4Kak4KawIOCmpeCnh+CmleCnh+CmhyDgpobgpqrgpqHgp4fgpp8g4Kaa4KeH4KaVIOCmkyDgpobgpqrgpqHgp4fgpp8g4Kas4Ka+4Kaf4Kao4KWkIiwicmVsZWFzZWQiOiIyMDI2LTExLTI1Iiwic3ciOiJydHYtdjIiLCJ2ZXJzaW9uIjoiMi4wIn0=", { cache:"no-store" })
+  fetch("data:application/json;base64,eyJub3RlcyI6IuCmquCnjeCmsuCnh+Cmr+CmvOCmvuCmsCDgpqrgp4fgppwg4Kao4Kak4KeB4KaoIFRlbGVnaG9yLeCmuOCnjeCmn+CmvuCmh+CmsiDgpqHgpr/gppzgpr7gpofgpqg6IOCmleCmvuCmuOCnjeCmn+CmriDgppXgpqjgp43gpp/gp43gprDgp4vgprIg4Kas4Ka+4KawLCDgprLgpr7gpofgpq0g4Ka44KeN4Kaq4Ka/4KahIOCmkyDgpqHgp4fgpp/gpr4g4Ka44KeN4Kaf4KeN4Kav4Ka+4Kaf4Ka4LCDgppXgp43gpq/gpr7gpp/gpr7gppfgprDgpr8g4Kaq4Ka/4KayIOCmkyDgppXgp43gpq/gpr7gpp/gpr7gprLgppcg4Ka44KeH4KaV4Ka24Kao4KWkIiwicmVsZWFzZWQiOiIyMDI2LTExLTI1Iiwic3ciOiJydHYtdjMiLCJ2ZXJzaW9uIjoiMi4xIn0=", { cache:"no-store" })
     .then(function(r){ if(!r.ok) throw new Error("http"); return r.json(); })
     .then(function(v){
       var newer = (v.version && v.version !== APP_VERSION) || (v.sw && v.sw !== SW_TAG);
@@ -1517,7 +2172,7 @@ document.getElementById("updateBannerLater").addEventListener("click", function(
 
 /* সার্ভিস ওয়ার্কার: অফলাইন শেল + নতুন সংস্করণ এলে নিজে জানানো */
 if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
-  navigator.serviceWorker.register("data:application/javascript;base64,LyogUkFITUFOIFRWIOKAlCBTZXJ2aWNlIFdvcmtlcgogICDgpoXgpqvgprLgpr7gpofgpqgg4Ka24KeH4KayIOCmleCnjeCmr+CmvuCmtiArIOCmqOCnh+Cmn+Cmk+Cmr+CmvOCmvuCmsOCnjeCmlS3gpqvgpr7gprDgp43gprjgp43gpp8g4KaG4Kaq4Kah4KeH4KafIOCmleCnjOCmtuCmsuClpAogICDgpprgp43gpq/gpr7gpqjgp4fgprIv4Kat4Ka/4Kah4Ka/4KaTIOCmuOCnjeCmn+CnjeCmsOCmv+CmriDgppXgppbgpqjgp4sg4KaV4KeN4Kav4Ka+4Ka2IOCmueCmr+CmvCDgpqjgpr4g4oCUIOCmuOCnh+Cml+CngeCmsuCniyDgprjgpqzgprjgpq7gpq/gprwg4Kay4Ka+4KaH4KatIOCmhuCmuOCnh+ClpCAqLwp2YXIgVkVSU0lPTiA9ICJydHYtdjIiOwp2YXIgQ09SRSA9IFsKICAiLi8iLAogICIuL21hbmlmZXN0LndlYm1hbmlmZXN0IiwKICAiLi9pY29uLTE5Mi5wbmciLAogICIuL2ljb24tNTEyLnBuZyIsCiAgIi4vaWNvbi1tYXNrYWJsZS01MTIucG5nIiwKICAiLi9hcHBsZS10b3VjaC1pY29uLnBuZyIKXTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiaW5zdGFsbCIsIGZ1bmN0aW9uIChldmVudCkgewogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNhY2hlcy5vcGVuKFZFUlNJT04pLnRoZW4oZnVuY3Rpb24gKGNhY2hlKSB7CiAgICAgIHJldHVybiBjYWNoZS5hZGRBbGwoQ09SRSk7CiAgICB9KS50aGVuKGZ1bmN0aW9uICgpIHsgcmV0dXJuIHNlbGYuc2tpcFdhaXRpbmcoKTsgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiYWN0aXZhdGUiLCBmdW5jdGlvbiAoZXZlbnQpIHsKICBldmVudC53YWl0VW50aWwoCiAgICBjYWNoZXMua2V5cygpLnRoZW4oZnVuY3Rpb24gKGtleXMpIHsKICAgICAgcmV0dXJuIFByb21pc2UuYWxsKGtleXMubWFwKGZ1bmN0aW9uIChrKSB7CiAgICAgICAgcmV0dXJuIGsgPT09IFZFUlNJT04gPyBudWxsIDogY2FjaGVzLmRlbGV0ZShrKTsKICAgICAgfSkpOwogICAgfSkudGhlbihmdW5jdGlvbiAoKSB7IHJldHVybiBzZWxmLmNsaWVudHMuY2xhaW0oKTsgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiZmV0Y2giLCBmdW5jdGlvbiAoZXZlbnQpIHsKICB2YXIgcmVxID0gZXZlbnQucmVxdWVzdDsKICBpZiAocmVxLm1ldGhvZCAhPT0gIkdFVCIpIHJldHVybjsKICB2YXIgdXJsID0gbmV3IFVSTChyZXEudXJsKTsKCiAgLyog4Ka44KeN4Kaf4KeN4Kaw4Ka/4KauL+CmreCmv+CmoeCmv+Cmky/gpqzgpr7gpofgprDgp4fgprAg4KaV4Kao4Kaf4KeH4Kao4KeN4KafOiDgppXgp43gpq/gpr7gprYg4Kao4Kav4Ka8LCDgprjgprDgpr7gprjgprDgpr8g4Kao4KeH4Kaf4KaT4Kav4Ka84Ka+4Kaw4KeN4KaVICovCiAgaWYgKHVybC5vcmlnaW4gIT09IHNlbGYubG9jYXRpb24ub3JpZ2luKSByZXR1cm47CiAgaWYgKC9cLihtM3U4fG1wZHxtcDR8bWt2fHRzfGFhY3xrZXkpKCR8XD8pL2kudGVzdCh1cmwucGF0aG5hbWUpKSByZXR1cm47CgogIC8qIHZlcnNpb24uanNvbjog4Ka44Kas4Ka44Kau4Kav4Ka8IOCmqOCnh+Cmn+Cmk+Cmr+CmvOCmvuCmsOCnjeCmlSDgpqXgp4fgppXgp4cg4oCUIOCmhuCmquCmoeCnh+CmnyDgpprgp4fgppXgp4fgprAg4Kac4Kao4KeN4KavICovCiAgaWYgKC92ZXJzaW9uXC5qc29uJC8udGVzdCh1cmwucGF0aG5hbWUpKSB7CiAgICBldmVudC5yZXNwb25kV2l0aChmZXRjaChyZXEsIHsgY2FjaGU6ICJuby1zdG9yZSIgfSkuY2F0Y2goZnVuY3Rpb24gKCkgewogICAgICByZXR1cm4gY2FjaGVzLm1hdGNoKHJlcSk7CiAgICB9KSk7CiAgICByZXR1cm47CiAgfQoKICAvKiDgpqrgp4fgppwgKEhUTUwpOiBuZXR3b3JrLWZpcnN0IOKAlCDgpqjgpqTgp4Hgpqgg4Ka44KaC4Ka44KeN4KaV4Kaw4KajIOCmpeCmvuCmleCmsuCnhyDgprjgp4fgpp/gpr7gpocg4KaG4Ka44Kas4KeHICovCiAgaWYgKHJlcS5tb2RlID09PSAibmF2aWdhdGUiIHx8IC9cLmh0bWw/JC8udGVzdCh1cmwucGF0aG5hbWUpIHx8IHVybC5wYXRobmFtZS5lbmRzV2l0aCgiLyIpKSB7CiAgICBldmVudC5yZXNwb25kV2l0aCgKICAgICAgZmV0Y2gocmVxKS50aGVuKGZ1bmN0aW9uIChyZXMpIHsKICAgICAgICB2YXIgY29weSA9IHJlcy5jbG9uZSgpOwogICAgICAgIGNhY2hlcy5vcGVuKFZFUlNJT04pLnRoZW4oZnVuY3Rpb24gKGNhY2hlKSB7IGNhY2hlLnB1dChyZXEsIGNvcHkpOyB9KTsKICAgICAgICByZXR1cm4gcmVzOwogICAgICB9KS5jYXRjaChmdW5jdGlvbiAoKSB7CiAgICAgICAgcmV0dXJuIGNhY2hlcy5tYXRjaChyZXEpLnRoZW4oZnVuY3Rpb24gKGhpdCkgewogICAgICAgICAgcmV0dXJuIGhpdCB8fCBjYWNoZXMubWF0Y2goIi4vIik7CiAgICAgICAgfSk7CiAgICAgIH0pCiAgICApOwogICAgcmV0dXJuOwogIH0KCiAgLyog4Kas4Ka+4KaV4Ka/IOCmheCnjeCmr+CmvuCmuOCnh+Cmnzogc3RhbGUtd2hpbGUtcmV2YWxpZGF0ZSAqLwogIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKHJlcSkudGhlbihmdW5jdGlvbiAoaGl0KSB7CiAgICAgIHZhciBuZXQgPSBmZXRjaChyZXEpLnRoZW4oZnVuY3Rpb24gKHJlcykgewogICAgICAgIHZhciBjb3B5ID0gcmVzLmNsb25lKCk7CiAgICAgICAgY2FjaGVzLm9wZW4oVkVSU0lPTikudGhlbihmdW5jdGlvbiAoY2FjaGUpIHsgY2FjaGUucHV0KHJlcSwgY29weSk7IH0pOwogICAgICAgIHJldHVybiByZXM7CiAgICAgIH0pLmNhdGNoKGZ1bmN0aW9uICgpIHsgcmV0dXJuIGhpdDsgfSk7CiAgICAgIHJldHVybiBoaXQgfHwgbmV0OwogICAgfSkKICApOwp9KTsKCi8qIOCmquCnh+CmnCDgpqXgp4fgppXgp4cgIuCmj+CmluCmqOCmhyDgpobgpqrgpqHgp4fgpp8iIOCmquCnh+CmsuCnhyDgpoXgpqrgp4fgppXgp43gprfgpq7gpr7gpqMg4KaT4Kav4Ka84Ka+4Kaw4KeN4KaV4Ka+4KawIOCmuOCmleCnjeCmsOCmv+Cmr+CmvCDgppXgprDgpr4gKi8Kc2VsZi5hZGRFdmVudExpc3RlbmVyKCJtZXNzYWdlIiwgZnVuY3Rpb24gKGV2ZW50KSB7CiAgaWYgKGV2ZW50LmRhdGEgJiYgZXZlbnQuZGF0YS50eXBlID09PSAiU0tJUF9XQUlUSU5HIikgc2VsZi5za2lwV2FpdGluZygpOwp9KTsK", { scope:"assets/" }).then(function(reg){
+  navigator.serviceWorker.register("data:application/javascript;base64,LyogUkFITUFOIFRWIOKAlCBTZXJ2aWNlIFdvcmtlcgogICDgpoXgpqvgprLgpr7gpofgpqgg4Ka24KeH4KayIOCmleCnjeCmr+CmvuCmtiArIOCmqOCnh+Cmn+Cmk+Cmr+CmvOCmvuCmsOCnjeCmlS3gpqvgpr7gprDgp43gprjgp43gpp8g4KaG4Kaq4Kah4KeH4KafIOCmleCnjOCmtuCmsuClpAogICDgpprgp43gpq/gpr7gpqjgp4fgprIv4Kat4Ka/4Kah4Ka/4KaTIOCmuOCnjeCmn+CnjeCmsOCmv+CmriDgppXgppbgpqjgp4sg4KaV4KeN4Kav4Ka+4Ka2IOCmueCmr+CmvCDgpqjgpr4g4oCUIOCmuOCnh+Cml+CngeCmsuCniyDgprjgpqzgprjgpq7gpq/gprwg4Kay4Ka+4KaH4KatIOCmhuCmuOCnh+ClpCAqLwp2YXIgVkVSU0lPTiA9ICJydHYtdjMiOwp2YXIgQ09SRSA9IFsKICAiLi8iLAogICIuL21hbmlmZXN0LndlYm1hbmlmZXN0IiwKICAiLi9pY29uLTE5Mi5wbmciLAogICIuL2ljb24tNTEyLnBuZyIsCiAgIi4vaWNvbi1tYXNrYWJsZS01MTIucG5nIiwKICAiLi9hcHBsZS10b3VjaC1pY29uLnBuZyIKXTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiaW5zdGFsbCIsIGZ1bmN0aW9uIChldmVudCkgewogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNhY2hlcy5vcGVuKFZFUlNJT04pLnRoZW4oZnVuY3Rpb24gKGNhY2hlKSB7CiAgICAgIHJldHVybiBjYWNoZS5hZGRBbGwoQ09SRSk7CiAgICB9KS50aGVuKGZ1bmN0aW9uICgpIHsgcmV0dXJuIHNlbGYuc2tpcFdhaXRpbmcoKTsgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiYWN0aXZhdGUiLCBmdW5jdGlvbiAoZXZlbnQpIHsKICBldmVudC53YWl0VW50aWwoCiAgICBjYWNoZXMua2V5cygpLnRoZW4oZnVuY3Rpb24gKGtleXMpIHsKICAgICAgcmV0dXJuIFByb21pc2UuYWxsKGtleXMubWFwKGZ1bmN0aW9uIChrKSB7CiAgICAgICAgcmV0dXJuIGsgPT09IFZFUlNJT04gPyBudWxsIDogY2FjaGVzLmRlbGV0ZShrKTsKICAgICAgfSkpOwogICAgfSkudGhlbihmdW5jdGlvbiAoKSB7IHJldHVybiBzZWxmLmNsaWVudHMuY2xhaW0oKTsgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiZmV0Y2giLCBmdW5jdGlvbiAoZXZlbnQpIHsKICB2YXIgcmVxID0gZXZlbnQucmVxdWVzdDsKICBpZiAocmVxLm1ldGhvZCAhPT0gIkdFVCIpIHJldHVybjsKICB2YXIgdXJsID0gbmV3IFVSTChyZXEudXJsKTsKCiAgLyog4Ka44KeN4Kaf4KeN4Kaw4Ka/4KauL+CmreCmv+CmoeCmv+Cmky/gpqzgpr7gpofgprDgp4fgprAg4KaV4Kao4Kaf4KeH4Kao4KeN4KafOiDgppXgp43gpq/gpr7gprYg4Kao4Kav4Ka8LCDgprjgprDgpr7gprjgprDgpr8g4Kao4KeH4Kaf4KaT4Kav4Ka84Ka+4Kaw4KeN4KaVICovCiAgaWYgKHVybC5vcmlnaW4gIT09IHNlbGYubG9jYXRpb24ub3JpZ2luKSByZXR1cm47CiAgaWYgKC9cLihtM3U4fG1wZHxtcDR8bWt2fHRzfGFhY3xrZXkpKCR8XD8pL2kudGVzdCh1cmwucGF0aG5hbWUpKSByZXR1cm47CgogIC8qIHZlcnNpb24uanNvbjog4Ka44Kas4Ka44Kau4Kav4Ka8IOCmqOCnh+Cmn+Cmk+Cmr+CmvOCmvuCmsOCnjeCmlSDgpqXgp4fgppXgp4cg4oCUIOCmhuCmquCmoeCnh+CmnyDgpprgp4fgppXgp4fgprAg4Kac4Kao4KeN4KavICovCiAgaWYgKC92ZXJzaW9uXC5qc29uJC8udGVzdCh1cmwucGF0aG5hbWUpKSB7CiAgICBldmVudC5yZXNwb25kV2l0aChmZXRjaChyZXEsIHsgY2FjaGU6ICJuby1zdG9yZSIgfSkuY2F0Y2goZnVuY3Rpb24gKCkgewogICAgICByZXR1cm4gY2FjaGVzLm1hdGNoKHJlcSk7CiAgICB9KSk7CiAgICByZXR1cm47CiAgfQoKICAvKiDgpqrgp4fgppwgKEhUTUwpOiBuZXR3b3JrLWZpcnN0IOKAlCDgpqjgpqTgp4Hgpqgg4Ka44KaC4Ka44KeN4KaV4Kaw4KajIOCmpeCmvuCmleCmsuCnhyDgprjgp4fgpp/gpr7gpocg4KaG4Ka44Kas4KeHICovCiAgaWYgKHJlcS5tb2RlID09PSAibmF2aWdhdGUiIHx8IC9cLmh0bWw/JC8udGVzdCh1cmwucGF0aG5hbWUpIHx8IHVybC5wYXRobmFtZS5lbmRzV2l0aCgiLyIpKSB7CiAgICBldmVudC5yZXNwb25kV2l0aCgKICAgICAgZmV0Y2gocmVxKS50aGVuKGZ1bmN0aW9uIChyZXMpIHsKICAgICAgICB2YXIgY29weSA9IHJlcy5jbG9uZSgpOwogICAgICAgIGNhY2hlcy5vcGVuKFZFUlNJT04pLnRoZW4oZnVuY3Rpb24gKGNhY2hlKSB7IGNhY2hlLnB1dChyZXEsIGNvcHkpOyB9KTsKICAgICAgICByZXR1cm4gcmVzOwogICAgICB9KS5jYXRjaChmdW5jdGlvbiAoKSB7CiAgICAgICAgcmV0dXJuIGNhY2hlcy5tYXRjaChyZXEpLnRoZW4oZnVuY3Rpb24gKGhpdCkgewogICAgICAgICAgcmV0dXJuIGhpdCB8fCBjYWNoZXMubWF0Y2goIi4vIik7CiAgICAgICAgfSk7CiAgICAgIH0pCiAgICApOwogICAgcmV0dXJuOwogIH0KCiAgLyog4Kas4Ka+4KaV4Ka/IOCmheCnjeCmr+CmvuCmuOCnh+Cmnzogc3RhbGUtd2hpbGUtcmV2YWxpZGF0ZSAqLwogIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKHJlcSkudGhlbihmdW5jdGlvbiAoaGl0KSB7CiAgICAgIHZhciBuZXQgPSBmZXRjaChyZXEpLnRoZW4oZnVuY3Rpb24gKHJlcykgewogICAgICAgIHZhciBjb3B5ID0gcmVzLmNsb25lKCk7CiAgICAgICAgY2FjaGVzLm9wZW4oVkVSU0lPTikudGhlbihmdW5jdGlvbiAoY2FjaGUpIHsgY2FjaGUucHV0KHJlcSwgY29weSk7IH0pOwogICAgICAgIHJldHVybiByZXM7CiAgICAgIH0pLmNhdGNoKGZ1bmN0aW9uICgpIHsgcmV0dXJuIGhpdDsgfSk7CiAgICAgIHJldHVybiBoaXQgfHwgbmV0OwogICAgfSkKICApOwp9KTsKCi8qIOCmquCnh+CmnCDgpqXgp4fgppXgp4cgIuCmj+CmluCmqOCmhyDgpobgpqrgpqHgp4fgpp8iIOCmquCnh+CmsuCnhyDgpoXgpqrgp4fgppXgp43gprfgpq7gpr7gpqMg4KaT4Kav4Ka84Ka+4Kaw4KeN4KaV4Ka+4KawIOCmuOCmleCnjeCmsOCmv+Cmr+CmvCDgppXgprDgpr4gKi8Kc2VsZi5hZGRFdmVudExpc3RlbmVyKCJtZXNzYWdlIiwgZnVuY3Rpb24gKGV2ZW50KSB7CiAgaWYgKGV2ZW50LmRhdGEgJiYgZXZlbnQuZGF0YS50eXBlID09PSAiU0tJUF9XQUlUSU5HIikgc2VsZi5za2lwV2FpdGluZygpOwp9KTsK", { scope:"assets/" }).then(function(reg){
     swReg = reg;
     if(reg.waiting && navigator.serviceWorker.controller) onUpdateReady();
     reg.addEventListener("updatefound", function(){
