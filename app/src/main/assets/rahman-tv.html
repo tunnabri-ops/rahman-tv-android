@@ -329,7 +329,7 @@ html[data-hatch-target="tv"] #castBtn{display:none}
 .player-wrap{
   position:relative; aspect-ratio:16/9; background:#000; border-radius:14px; overflow:hidden;
 }
-.player-wrap video{width:100%; height:100%; display:block; background:#000}
+.player-wrap video{width:100%; height:100%; display:block; background:#000; object-fit:contain}
 .player-msg{
   position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center;
   color:#fff; padding:24px; font-size:15px; line-height:1.6; background:rgba(0,0,0,.72); z-index:5;
@@ -691,10 +691,27 @@ html[data-hatch-target="tv"] #liveSection{display:none}
   .sidebar .nav-head{display:block}
   .scrim.show{display:block; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:75}
   .main{padding:0 14px 96px}
-  .grid{grid-template-columns:1fr; gap:28px}
-  .card{padding:0}
-  .thumb{border-radius:12px; margin:0}
-  .card-meta{padding:12px 0 0}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 10px}
+  .card{padding:0; min-width:0}
+  .thumb{border-radius:10px; margin:0}
+  .thumb .initial{font-size:34px}
+  .thumb img.logo{max-width:52%; max-height:56%}
+  .badge-live{left:6px; top:6px; font-size:10.5px; padding:2px 6px; border-radius:5px}
+  .badge-cat,.badge-srv{right:5px; bottom:5px; font-size:10px; padding:2px 5px}
+  .badge-dur{left:6px; bottom:6px; font-size:10.5px; padding:2px 5px}
+  .badge-fav{right:5px; top:5px; width:24px; height:24px}
+  .badge-fav svg{width:13px; height:13px}
+  .card-meta{gap:6px; padding:8px 0 0; min-width:0}
+  .card-ava{width:28px; height:28px; font-size:12px}
+  .card-txt{min-width:0; flex:1}
+  .card-name{font-size:13px; line-height:1.3}
+  .card-sub{font-size:11.5px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .dots-btn{display:none}
+  .watch .player-wrap{width:88%; margin:0 auto}
+  .watch .watch-title{font-size:17px}
+  .live-sec-head{margin-bottom:10px}
+  .live-sec-head h2{font-size:17px}
+  #liveSection{margin-bottom:22px}
   #menuBtn{display:none}
   .live-pill{display:none}
   #feedView .feed-head{display:none}
