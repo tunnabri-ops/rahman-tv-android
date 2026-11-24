@@ -162,12 +162,13 @@ button,[role="button"],a,select,summary,input:not([type="checkbox"]){min-height:
 
 /* ---------- Update banner ---------- */
 .update-banner{
-  position:fixed; left:50%; transform:translate(-50%,140%); bottom:18px; z-index:95;
-  display:flex; align-items:center; gap:12px; max-width:min(520px,calc(100vw - 24px));
+  position:fixed; left:50%; transform:translate(-50%,0); bottom:18px; z-index:95;
+  display:none; align-items:center; gap:12px; max-width:min(520px,calc(100vw - 24px));
   background:var(--text); color:var(--bg); border-radius:14px; padding:12px 14px;
-  box-shadow:0 10px 34px rgba(0,0,0,.35); transition:transform .3s ease; font-size:14px;
+  box-shadow:0 10px 34px rgba(0,0,0,.35); font-size:14px;
 }
-.update-banner.show{transform:translate(-50%,0)}
+.update-banner.show{display:flex; animation:ubIn .3s ease}
+@keyframes ubIn{from{transform:translate(-50%,140%)}to{transform:translate(-50%,0)}}
 .update-banner .ub-txt{line-height:1.45}
 .update-banner .ub-txt b{display:block; font-size:14.5px}
 .update-banner button{
@@ -267,6 +268,10 @@ html[data-hatch-target="tv"] #castBtn{display:none}
 .badge-cat{
   position:absolute; z-index:4; right:8px; bottom:8px; background:rgba(0,0,0,.82); color:#fff;
   font-size:11.5px; font-weight:500; padding:3px 7px; border-radius:5px;
+}
+.badge-srv{
+  position:absolute; z-index:4; right:8px; bottom:8px; background:rgba(0,0,0,.82); color:#fff;
+  font-size:11.5px; font-weight:700; padding:3px 8px; border-radius:5px;
 }
 .badge-dur{
   position:absolute; z-index:4; left:10px; bottom:10px; background:rgba(0,0,0,.85); color:#fff;
@@ -499,6 +504,35 @@ html[data-hatch-target="tv"] .watch-left{position:static}
   .tg-stats{width:100%; border-left:0; border-top:1px solid var(--nv-line); padding:10px 0 0; margin-top:2px}
 }
 
+/* Server rail: একই চ্যানেলের একাধিক সোর্স — মোবাইলে প্লেয়ারের নিচে চিপ,
+   ডেস্কটপ/TV-তে প্লেয়ারের ডান পাশে কলাম */
+.server-rail{display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:12px 0 0}
+.server-rail[hidden]{display:none}
+.server-rail .sr-label{font-size:12.5px; color:var(--nv-sub); font-weight:600; margin-right:2px}
+.srv-btn{
+  height:36px; padding:0 14px; border-radius:18px; cursor:pointer;
+  border:1px solid var(--nv-line); background:var(--nv-panel); color:#e2e8f0;
+  font-size:13.5px; font-weight:600; display:inline-flex; align-items:center; gap:8px;
+}
+.srv-btn:hover{background:var(--nv-panel2)}
+.srv-btn .sdot{width:8px; height:8px; border-radius:50%; background:#64748b; flex-shrink:0}
+.srv-btn.active{border-color:var(--nv-green); background:rgba(34,197,94,.15); color:#fff}
+.srv-btn.active .sdot{background:var(--nv-green)}
+.srv-btn.failed .sdot{background:#ef4444}
+@media (min-width:1101px){
+  .watch-left{display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:14px; align-items:start}
+  .watch-left .player-wrap{grid-column:1; grid-row:1}
+  .server-rail{grid-column:2; grid-row:1; flex-direction:column; flex-wrap:nowrap; align-items:stretch; padding-top:0}
+  .server-rail .sr-label{margin:0 0 2px}
+  .watch-left .tg-pills,.watch-left .tg-title-block,.watch-left .tg-yt-link{grid-column:1/-1}
+}
+html[data-hatch-target="tv"] .watch-left{display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:12px; align-items:start}
+html[data-hatch-target="tv"] .watch-left .player-wrap{grid-column:1; grid-row:1}
+html[data-hatch-target="tv"] .server-rail{grid-column:2; grid-row:1; flex-direction:column; flex-wrap:nowrap; align-items:stretch; padding-top:0}
+html[data-hatch-target="tv"] .watch-left .tg-pills,
+html[data-hatch-target="tv"] .watch-left .tg-title-block,
+html[data-hatch-target="tv"] .watch-left .tg-yt-link{grid-column:1/-1}
+
 /* Right column: search + filter + catalog sections */
 .tg-search-row{display:flex; gap:9px; margin-bottom:4px}
 .tg-search{
@@ -672,7 +706,7 @@ html[data-hatch-target="tv"] #liveSection{display:none}
 @media (prefers-reduced-motion: reduce){
   .live-dot{animation:none}
   .sidebar{transition:none}
-  .card,.view-in,.watch.open,.panel.open,.skel .sk-thumb,.tg-spinner{animation:none}
+  .card,.view-in,.watch.open,.panel.open,.skel .sk-thumb,.tg-spinner,.update-banner.show{animation:none}
   .chip,.tg-pill,.tg-card,.pill-btn,.nav-item,.tg-controls{transition:none}
 }
 
@@ -708,9 +742,10 @@ html[data-hatch-target="tv"] .pager{margin-top:10px}
 html[data-hatch-target="tv"] .pager button{height:36px; min-height:36px}
 html[data-hatch-target="tv"] .status-line{display:none}
 html[data-hatch-target="tv"] .bottom-nav{display:none}
-html[data-hatch-target="tv"] .update-banner{bottom:auto; top:12px; transform:translate(-50%,-180%)}
-html[data-hatch-target="tv"] .update-banner.show{transform:translate(-50%,0)}
-html[data-hatch-target="tv"] .card-sub{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+html[data-hatch-target="tv"] .update-banner{bottom:auto; top:12px}
+html[data-hatch-target="tv"] .update-banner.show{animation-name:ubInTv}
+@keyframes ubInTv{from{transform:translate(-50%,-180%)}to{transform:translate(-50%,0)}}
+html[data-hatch-target="tv"] .card-sub{display:-webkit-box !important; -webkit-line-clamp:1; -webkit-box-orient:vertical; white-space:normal; overflow:hidden}
 html[data-hatch-target="tv"] .dots-btn{width:26px; height:26px; min-height:26px}
 html[data-hatch-target="tv"] .dots-btn svg{width:15px; height:15px}
 html[data-hatch-target="tv"] .badge-dur{font-size:11px; left:6px; bottom:6px; padding:2px 6px}
@@ -843,6 +878,7 @@ html[data-hatch-target="tv"] .watch{height:100%; overflow:hidden}
             </div>
             <div class="player-msg" id="playerMsg"></div>
           </div>
+          <div class="server-rail" id="serverRail" hidden></div>
           <div class="tg-pills" id="tgPills"></div>
           <div class="tg-title-block">
             <div class="tg-tv-icon">TV</div>
@@ -1065,14 +1101,43 @@ var feedSub = document.getElementById("feedSub");
 var statusLine = document.getElementById("statusLine");
 var searchInput = document.getElementById("searchInput");
 
-function channelItems(){ return channels.map(chItem); }
+/* ===== একই নামের চ্যানেল = এক কার্ড, একাধিক সার্ভার =====
+   channels.json-এ একই নামে ভিন্ন ভিন্ন URL-এর এন্ট্রি থাকলে ডুপ্লিকেট বলে
+   বাদ না দিয়ে নাম দিয়ে গ্রুপ করা হয় — প্রতিটা আলাদা URL একেকটা সার্ভার।
+   একই নাম + একই URL হলে সেটা সত্যিকারের ডুপ্লিকেট, একবারই রাখা হয়। */
+var serverSel = {};    /* channel key -> বেছে নেওয়া সার্ভারের index */
+var serverFailed = {}; /* channel key -> {index:true} যেসব সার্ভার লোড এরর দিয়েছে */
+function normName(n){ return String(n||"").trim().replace(/\s+/g," ").toLowerCase(); }
+function channelItems(){
+  var map = {}, order = [];
+  channels.forEach(function(c){
+    var k = normName(c.n);
+    var it = map[k];
+    if(!it){
+      it = { key:"ch:"+k, kind:"channel", title:String(c.n||"").trim(), group:c.g||"Other", logo:c.l||"", thumb:"", url:"", yt:"", fmt:"native", meta:"", dur:"", servers:[], serverIdx:0 };
+      map[k] = it; order.push(it);
+    }
+    if(!it.logo && c.l) it.logo = c.l;
+    var dup = false;
+    for(var i=0;i<it.servers.length;i++){ if(it.servers[i].url===c.u){ dup = true; break; } }
+    if(!dup) it.servers.push({ url:c.u, fmt:detectFormat(c.u) });
+  });
+  order.forEach(function(it){
+    var idx = serverSel[it.key] || 0;
+    if(idx >= it.servers.length) idx = 0;
+    it.serverIdx = idx;
+    it.url = it.servers[idx].url;
+    it.fmt = it.servers[idx].fmt;
+  });
+  return order;
+}
 function groupsPresent(){
   var seen = {};
   channels.forEach(function(c){ seen[c.g||"Other"]=true; });
   return GROUP_ORDER.filter(function(g){ return seen[g]; })
     .concat(Object.keys(seen).filter(function(g){ return GROUP_ORDER.indexOf(g)<0; }));
 }
-function countOf(g){ return channels.filter(function(c){ return (c.g||"Other")===g; }).length; }
+function countOf(g){ return channelItems().filter(function(it){ return it.group===g; }).length; }
 function findItem(key){
   var all = channelItems().concat(MOVIE_ITEMS, NATOK_ITEMS, historyItems);
   for(var i=0;i<all.length;i++){ if(all[i].key===key) return all[i]; }
@@ -1112,7 +1177,7 @@ function viewUnit(){
 
 function renderNav(){
   var html = "";
-  html += '<button class="nav-item'+(state.view==="all"?' active':'')+'" data-view="all">'+ICONS.home+'<span>হোম</span><span class="cnt">'+bn(channels.length)+'</span></button>';
+  html += '<button class="nav-item'+(state.view==="all"?' active':'')+'" data-view="all">'+ICONS.home+'<span>হোম</span><span class="cnt">'+bn(channelItems().length)+'</span></button>';
   groupsPresent().forEach(function(g){
     html += '<button class="nav-item'+(state.view===g?' active':'')+'" data-view="'+esc(g)+'">'+groupIcon(g)+'<span>'+esc(groupBn(g))+'</span><span class="cnt">'+bn(countOf(g))+'</span></button>';
   });
@@ -1180,13 +1245,15 @@ function cardHTML(it){
      নির্দিষ্ট সময়কাল নেই — তাই সেখানে ভুয়া সময় না বসিয়ে পিল রাখা হয়নি। */
   var durTxt = it.dur || "";
   var durPill = durTxt ? '<span class="badge-dur">'+esc(durTxt)+'</span>' : "";
+  /* একই নামের একাধিক সোর্স থাকলে কার্ডে সার্ভার-সংখ্যার ব্যাজ */
+  var srvBadge = (it.servers && it.servers.length>1) ? '<span class="badge-srv">'+bn(it.servers.length)+' সার্ভার</span>' : "";
   var prog = live ? '<span class="prog"><i style="width:100%"></i></span>' : "";
   var sub = it.kind==="channel" ? esc(it.title)+" • "+esc(groupBn(it.group)) : esc(it.meta);
   return '<button class="card" data-key="'+esc(it.key)+'" style="--h:'+h+'" aria-label="'+esc(it.title)+' চালান">'
     + '<span class="thumb">' + thumbInner
     + '<span class="play-veil"><span><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg></span></span>'
     + (favorites[it.key] ? '<span class="badge-fav">'+ICONS.heart+'</span>' : "")
-    + badge + durPill + prog + '</span>'
+    + badge + srvBadge + durPill + prog + '</span>'
     + '<span class="card-meta"><span class="card-ava" style="--h:'+h+'">'+avaInner+'</span>'
     + '<span class="card-txt"><span class="card-name">'+esc(it.title)+'</span>'
     + '<span class="card-sub" style="display:block">'+sub+'</span></span>'
@@ -1319,6 +1386,35 @@ var watchView = document.getElementById("watchView");
 var player = document.getElementById("player");
 var ytFrame = document.getElementById("ytFrame");
 var playerMsg = document.getElementById("playerMsg");
+var serverRail = document.getElementById("serverRail");
+
+/* ----- সার্ভার রেল: চলমান চ্যানেলের সব সোর্স ছোট বাটনে ----- */
+function renderServerRail(){
+  if(!current || current.kind!=="channel" || !current.servers || !current.servers.length){
+    serverRail.hidden = true; serverRail.innerHTML = ""; return;
+  }
+  serverRail.hidden = false;
+  var failed = serverFailed[current.key] || {};
+  var html = '<span class="sr-label">সার্ভার:</span>';
+  current.servers.forEach(function(s, i){
+    var cls = "srv-btn" + (i===current.serverIdx ? " active" : "") + (failed[i] ? " failed" : "");
+    html += '<button class="'+cls+'" data-srv="'+i+'" aria-pressed="'+(i===current.serverIdx)+'"><span class="sdot"></span>সার্ভার '+bn(i+1)+'</button>';
+  });
+  serverRail.innerHTML = html;
+  serverRail.querySelectorAll(".srv-btn").forEach(function(b){
+    b.addEventListener("click", function(){ switchServer(parseInt(b.getAttribute("data-srv"),10)); });
+  });
+}
+function switchServer(i){
+  if(!current || !current.servers || !current.servers[i] || i===current.serverIdx) return;
+  current.serverIdx = i;
+  serverSel[current.key] = i;
+  current.url = current.servers[i].url;
+  current.fmt = current.servers[i].fmt;
+  startStream(current);
+  renderServerRail();
+  showToast("সার্ভার " + bn(i+1) + " চালু হচ্ছে…");
+}
 
 function showFeed(){
   watchView.classList.remove("open");
@@ -1326,6 +1422,7 @@ function showFeed(){
   if(p) p.classList.remove("open");
   feedView.style.display = "";
   stopPlayer();
+  serverRail.hidden = true;
   window.scrollTo(0,0);
   animateIn(feedView);
 }
@@ -1354,10 +1451,23 @@ function stopPlayer(){
 function showPlayerError(fmt){
   hideLoading();
   var extra = fmt==="mkv" ? "<br/>MKV ফরম্যাট সব ব্রাউজারে চলে না — Chrome/Edge-এ চেষ্টা করুন।" : "";
-  playerMsg.innerHTML = '<div>এই ভিডিওটি এখন ব্রাউজারে চালানো যাচ্ছে না।<br/>নেটওয়ার্ক বা সার্ভারের কারণে এমন হতে পারে — আবার চেষ্টা করুন, বা অন্য কিছু চালান।'+extra+'<br/><button id="pmRetry">আবার চেষ্টা</button></div>';
+  /* চলমান সার্ভারটা ব্যর্থ হিসেবে চিহ্নিত করা হয়; পরের সার্ভার থাকলে
+     প্লেয়ারেই সেটা চেষ্টা করার বাটন দেখায় */
+  var nextBtn = "";
+  if(current && current.kind==="channel" && current.servers && current.servers.length>1){
+    if(!serverFailed[current.key]) serverFailed[current.key] = {};
+    serverFailed[current.key][current.serverIdx] = true;
+    if(current.serverIdx < current.servers.length-1){
+      nextBtn = '<br/><button id="pmNext">পরের সার্ভার চেষ্টা করুন (সার্ভার '+bn(current.serverIdx+2)+')</button>';
+    }
+  }
+  playerMsg.innerHTML = '<div>এই ভিডিওটি এখন ব্রাউজারে চালানো যাচ্ছে না।<br/>নেটওয়ার্ক বা সার্ভারের কারণে এমন হতে পারে — আবার চেষ্টা করুন, বা অন্য কিছু চালান।'+extra+'<br/><button id="pmRetry">আবার চেষ্টা</button>'+nextBtn+'</div>';
   playerMsg.classList.add("show");
   var b = document.getElementById("pmRetry");
   if(b) b.addEventListener("click", function(){ if(current) startStream(current); });
+  var nb = document.getElementById("pmNext");
+  if(nb) nb.addEventListener("click", function(){ if(current) switchServer(current.serverIdx+1); });
+  renderServerRail();
 }
 function startStream(it){
   stopPlayer();
@@ -1370,7 +1480,7 @@ function startStream(it){
   }
   playerWrap.classList.remove("is-yt");
   tgEmpty.classList.remove("show");
-  showLoading("Connecting Server 1");
+  showLoading("Connecting Server " + ((it.serverIdx||0)+1));
   startStats();
   var url = it.url;
   var fmt = it.fmt || detectFormat(url);
@@ -1439,6 +1549,7 @@ function playItem(it){
   renderTgPills();
   renderTgSections();
   startStream(it);
+  renderServerRail();
   updatePlayIcon();
   showControls(true);
   renderNav();
@@ -1706,7 +1817,7 @@ document.getElementById("tgWatchFreeBtn").addEventListener("click", function(){
 var tgPill = "all";
 var PILL_EN = { "Live Event": "Live Events", "Movies": "Movie Channels" };
 function renderTgPills(){
-  var html = '<button class="tg-pill' + (tgPill === "all" ? ' active' : '') + '" data-tgp="all">All Channels<span class="n">' + channels.length + '</span></button>';
+  var html = '<button class="tg-pill' + (tgPill === "all" ? ' active' : '') + '" data-tgp="all">All Channels<span class="n">' + channelItems().length + '</span></button>';
   groupsPresent().forEach(function(g){
     html += '<button class="tg-pill' + (tgPill === g ? ' active' : '') + '" data-tgp="' + esc(g) + '">' + esc(PILL_EN[g] || g) + '<span class="n">' + countOf(g) + '</span></button>';
   });
@@ -1737,6 +1848,7 @@ function tgCardHTML(it){
   return '<button class="tg-card" data-key="' + esc(it.key) + '" style="--h:' + hue(it.title) + '">'
     + '<span class="thumb">' + tgThumbInner(it)
     + (isLiveItem(it) ? '<span class="badge-live"><i></i>LIVE</span>' : '')
+    + (it.servers && it.servers.length>1 ? '<span class="badge-srv">' + bn(it.servers.length) + ' সার্ভার</span>' : '')
     + (it.dur ? '<span class="badge-dur">' + esc(it.dur) + '</span>' : '')
     + '</span>'
     + '<span class="tg-card-name">' + esc(it.title) + '</span>'
@@ -1897,7 +2009,7 @@ document.addEventListener("keydown", function(e){
   var keys = ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"];
   if(keys.indexOf(e.key) < 0) return;
   var focusables = Array.prototype.slice.call(document.querySelectorAll(
-    ".card, .nav-item, .chip, .icon-btn, .live-pill, .install-btn, .search-box input, .pill-btn, .back-btn, .pager button, .brand, .card-menu button, .tg-card, .tg-pill, .tg-ctl-btn, .tg-q-btn, .tg-sec-all, .tg-filter-btn, .tg-fav, .tg-search input, .tg-btn-ghost, .tg-btn-red, .tg-q-menu button, .tg-filter-menu button"
+    ".card, .nav-item, .chip, .icon-btn, .live-pill, .install-btn, .search-box input, .pill-btn, .back-btn, .pager button, .brand, .card-menu button, .tg-card, .tg-pill, .srv-btn, .tg-ctl-btn, .tg-q-btn, .tg-sec-all, .tg-filter-btn, .tg-fav, .tg-search input, .tg-btn-ghost, .tg-btn-red, .tg-q-menu button, .tg-filter-menu button"
   )).filter(function(el){ return el.offsetParent !== null; });
   var act = document.activeElement;
   if(!act || focusables.indexOf(act) < 0) return;
@@ -1926,7 +2038,7 @@ function loadLive(manual){
   setStatus("অ্যাডমিন প্যানেল থেকে চ্যানেল লিস্ট আনা হচ্ছে…");
   var done = false;
   var timer = setTimeout(function(){
-    if(!done){ done = true; setStatus("লাইভ লিস্ট আনা যায়নি — <b>সংরক্ষিত তালিকা</b> দেখানো হচ্ছে (" + bn(channels.length) + "টি চ্যানেল, ২৫ নভেম্বর ২০২৬)।"); }
+    if(!done){ done = true; setStatus("লাইভ লিস্ট আনা যায়নি — <b>সংরক্ষিত তালিকা</b> দেখানো হচ্ছে (" + bn(channelItems().length) + "টি চ্যানেল, ২৫ নভেম্বর ২০২৬)।"); }
   }, 9000);
   fetch(SOURCE_URL, { cache:"no-store" })
     .then(function(r){ if(!r.ok) throw new Error("http"); return r.json(); })
@@ -1939,14 +2051,14 @@ function loadLive(manual){
         channels = list;
         var now = new Date();
         var hh = now.getHours(), mm = ("0"+now.getMinutes()).slice(-2);
-        setStatus("অ্যাডমিন প্যানেল থেকে <b>লাইভ আপডেট</b> হয়েছে • মোট <b>" + bn(channels.length) + "</b>টি চ্যানেল • আজ " + bn(hh) + ":" + bn(mm) + "-এ চেক করা হয়েছে।");
+        setStatus("অ্যাডমিন প্যানেল থেকে <b>লাইভ আপডেট</b> হয়েছে • মোট <b>" + bn(channelItems().length) + "</b>টি চ্যানেল • আজ " + bn(hh) + ":" + bn(mm) + "-এ চেক করা হয়েছে।");
         renderFeed(false);
         if(watchView.classList.contains("open")){ renderTgPills(); renderTgSections(); }
       }
     })
     .catch(function(){
       if(done) return; done = true; clearTimeout(timer);
-      setStatus("লাইভ লিস্ট আনা যায়নি — <b>সংরক্ষিত তালিকা</b> দেখানো হচ্ছে (" + bn(channels.length) + "টি চ্যানেল, ২৫ নভেম্বর ২০২৬)।");
+      setStatus("লাইভ লিস্ট আনা যায়নি — <b>সংরক্ষিত তালিকা</b> দেখানো হচ্ছে (" + bn(channelItems().length) + "টি চ্যানেল, ২৫ নভেম্বর ২০২৬)।");
     });
 }
 
