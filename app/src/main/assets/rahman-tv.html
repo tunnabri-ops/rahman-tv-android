@@ -690,24 +690,24 @@ html[data-hatch-target="tv"] #liveSection{display:none}
   .sidebar .nav-item .cnt{display:block}
   .sidebar .nav-head{display:block}
   .scrim.show{display:block; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:75}
-  .main{padding:0 14px 96px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 10px}
-  .card{padding:0; min-width:0}
-  .thumb{border-radius:10px; margin:0}
-  .thumb .initial{font-size:34px}
-  .thumb img.logo{max-width:52%; max-height:56%}
-  .badge-live{left:6px; top:6px; font-size:10.5px; padding:2px 6px; border-radius:5px}
-  .badge-cat,.badge-srv{right:5px; bottom:5px; font-size:10px; padding:2px 5px}
-  .badge-dur{left:6px; bottom:6px; font-size:10.5px; padding:2px 5px}
-  .badge-fav{right:5px; top:5px; width:24px; height:24px}
-  .badge-fav svg{width:13px; height:13px}
-  .card-meta{gap:6px; padding:8px 0 0; min-width:0}
-  .card-ava{width:28px; height:28px; font-size:12px}
+  .main{padding:0 14px 132px}
+  .grid{grid-template-columns:minmax(0,1fr); gap:26px 16px}
+  .card{padding:4px; min-width:0}
+  .thumb{border-radius:12px; margin:0}
+  .thumb .initial{font-size:52px}
+  .thumb img.logo{max-width:58%; max-height:62%}
+  .badge-live{left:10px; top:10px; font-size:12.5px; padding:4px 9px; border-radius:6px}
+  .badge-cat,.badge-srv{right:8px; bottom:8px; font-size:11.5px; padding:3px 7px}
+  .badge-dur{left:10px; bottom:10px; font-size:13px; padding:4px 8px}
+  .badge-fav{right:8px; top:8px; width:30px; height:30px}
+  .badge-fav svg{width:16px; height:16px}
+  .card-meta{gap:10px; padding:10px 2px 0; min-width:0}
+  .card-ava{width:36px; height:36px; font-size:15px}
   .card-txt{min-width:0; flex:1}
-  .card-name{font-size:13px; line-height:1.3}
-  .card-sub{font-size:11.5px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-  .dots-btn{display:none}
-  .watch .player-wrap{width:88%; margin:0 auto}
+  .card-name{font-size:15px; line-height:1.35}
+  .card-sub{font-size:13px; margin-top:3px}
+  .dots-btn{display:flex}
+  .watch .player-wrap{width:100%; margin:0}
   .watch .watch-title{font-size:17px}
   .live-sec-head{margin-bottom:10px}
   .live-sec-head h2{font-size:17px}
@@ -945,7 +945,7 @@ html[data-hatch-target="tv"] .watch{height:100%; overflow:hidden}
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEc0lEQVR4nO3bSXIbSRREwQSt739l9EJGGiFhqCGzcgj3A5BYxMMvgNKtDOZeyr33a6CdWym33q/ht64vxtgppW8Ul/9io+edq2O47JcZPntcFULzX2L4nNE6hGY/3PCpqVUI1X+o4dNS7RC+av4w46e12hurUpPh00ONa3D6Ahg/vdTY3qkAjJ/ezm7wcADGzyjObPFQAMbPaI5ucncAxs+ojmxzVwDGz+j2bnRzAMbPLPZsdVMAxs9stm72YwDGz6y2bLfqP4WA2bwNwLs/s/u04ZcBGD+reLdlj0BEexqAd39W82rTLgDR/gnAuz+rerZtF4BoDwF492d1f2/cBSDaTwDe/Unxe+suANEEQLSvUjz+kOd78y4A0QRANAEQTQBEu/kATDIXgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCeuftfoikE8Mr9LoQAAvhEBEsTwBauwbIEsIcIliOAvVyDpQjgKCEsQQBniWBqAqjBNZiWAGoSwXQEUJtrMBUBtCKCKQigJddgeAK4ghCGJYAriWA4AriaazAUAfQigiEIoCfXoDsBjEAI3QhgJCK4nABG4xpcSgCjEsElBDAy16A5AcxABM0IYBauQRMCmI0QqhLArERQhQBm5hqcJoAViOAwAazCNThEAKsRwi4CWJUINhHAylyDjwSQQAQvCSCFa/CUANKI4IEAErkGPwSQTAgCoERHIAD+CL0GAuBRWAQC4F9B1+C/3i+AAd1uvV/BZVwAHgWNvxQXgG9hw/8mgHShw//mEShZ+PhLcQEyGf4PFyCN8T9wAVIY/lMCWJ3hv+URaGXG/5ELsCLD30wAKzH83TwCrcL4D3EBZmf4p7gAMzP+01yAGRl+NQKYieFX5xFoFsbfhAswOsNvSgCjMvxLeAQakfFfxgUYieFfzgUYhfF34QL0ZvhdCaAXwx+CR6AejH8YLsCVDH84AriC4Q/LI1Brxj80F6AVw5+CC9CC8U/DBajJ8KcjgBoMf1oegc4y/qm5AEcZ/hIEsJfhL8Uj0B7GvxwXYAvDX5YL8InxL80FeMXwI7gAzxh/DAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAET7upXi//8R6VbKzQUgmgCIJgCiCYBoX6X8+TDQ+4XAlb437wIQTQBE+wnAYxApfm/dBSDaQwCuAKv7e+MuANH+CcAVYFXPtu0CEO1pAK4Aq3m1aReAaC8DcAVYxbstv70AImB2nzbsEYhoHwNwBZjVlu1uugAiYDZbN7v5EUgEzGLPVnd9BhABo9u70d0fgkXAqI5s89C3QCJgNEc3efhrUBEwijNbPPV3ABHQ29kNnv5DmAjopcb2qo73Xsq95s+DZ2q+6Vb9pxCuAa3V3lizwboG1NTqzbX5O7YQOKP1U8VljyxCYI+rHqcvf2YXAu9c/Tmy64dWMVBK3y9PhvvWRhRrG+2bwv8BZr3pc/VlkV8AAAAASUVORK5CYII=" alt="RAHMAN TV অ্যাপ আইকন" />
         <div>
           <p class="ac-name">RAHMAN TV</p>
-          <p class="ac-sub">সংস্করণ <b id="appVerTxt">2.1</b> • লাইভ টিভি, মুভি ও বাংলা নাটক<br/><span id="installStateTxt">এই ব্রাউজারে চলছে — ইনস্টল করলে হোম স্ক্রিন থেকে এক ট্যাপে খুলবে।</span></p>
+          <p class="ac-sub">সংস্করণ <b id="appVerTxt">2.2</b> • লাইভ টিভি, মুভি ও বাংলা নাটক<br/><span id="installStateTxt">এই ব্রাউজারে চলছে — ইনস্টল করলে হোম স্ক্রিন থেকে এক ট্যাপে খুলবে।</span></p>
         </div>
         <div class="ac-actions">
           <button class="pill-btn primary" id="panelInstallBtn">
@@ -2137,8 +2137,8 @@ document.getElementById("castBtn").addEventListener("click", function(){
 });
 
 /* ---------- অ্যাপ ইনস্টল ও আপডেট (PWA) ---------- */
-var APP_VERSION = "2.1";
-var SW_TAG = "rtv-v3";
+var APP_VERSION = "2.2";
+var SW_TAG = "rtv-v4";
 var PROMPT_METHOD = "prompt";
 var appPanel = document.getElementById("appPanel");
 var deferredPrompt = null;
@@ -2247,7 +2247,7 @@ function onUpdateReady(ver){
 function checkUpdate(manual){
   var st = document.getElementById("updStatus");
   if(manual && st) st.innerHTML = "আপডেট চেক করা হচ্ছে…";
-  fetch("data:application/json;base64,eyJub3RlcyI6IuCmquCnjeCmsuCnh+Cmr+CmvOCmvuCmsCDgpqrgp4fgppwg4Kao4Kak4KeB4KaoIFRlbGVnaG9yLeCmuOCnjeCmn+CmvuCmh+CmsiDgpqHgpr/gppzgpr7gpofgpqg6IOCmleCmvuCmuOCnjeCmn+CmriDgppXgpqjgp43gpp/gp43gprDgp4vgprIg4Kas4Ka+4KawLCDgprLgpr7gpofgpq0g4Ka44KeN4Kaq4Ka/4KahIOCmkyDgpqHgp4fgpp/gpr4g4Ka44KeN4Kaf4KeN4Kav4Ka+4Kaf4Ka4LCDgppXgp43gpq/gpr7gpp/gpr7gppfgprDgpr8g4Kaq4Ka/4KayIOCmkyDgppXgp43gpq/gpr7gpp/gpr7gprLgppcg4Ka44KeH4KaV4Ka24Kao4KWkIiwicmVsZWFzZWQiOiIyMDI2LTExLTI1Iiwic3ciOiJydHYtdjMiLCJ2ZXJzaW9uIjoiMi4xIn0=", { cache:"no-store" })
+  fetch("data:application/json;base64,eyJub3RlcyI6IuCmhuCml+Cnh+CmsCB1c2VyLWZyaWVuZGx5IOCmsuCnh+CmhuCmieCmnyDgpqvgpr/gprDgp4cg4KaP4Ka44KeH4Kab4KeHOiDgpq7gp4vgpqzgpr7gpofgprLgp4cg4Kar4KeB4KayLeCmieCmh+CmoeCmpSAxNjo5IOCmquCnjeCmsuCnh+Cmr+CmvOCmvuCmsCwg4KaP4KaVIOCmleCmsuCmvuCmruCnh+CmsCDgpqzgpqHgprwgWW91VHViZS3gprjgp43gpp/gpr7gpofgprIg4KaV4Ka+4Kaw4KeN4KahIOCmhuCmsCDgpobgprDgppMg4KaF4Kaq4Ka24KaoICjgpqTgpr/gpqgg4Kah4KafKSDgpqzgpr7gpp/gpqjgpaQgVGVsZWdob3It4Ka44KeN4Kaf4Ka+4KaH4KayIOCmquCnjeCmsuCnh+Cmr+CmvOCmvuCmsCDgpobgprAg4Ka44Ka+4Kaw4KeN4Kat4Ka+4KawIOCnpy/gp6gg4Kas4Ka+4Kaf4KaoIOCmhuCml+Cnh+CmsCDgpq7gpqTgp4vgpocg4KaG4Kab4KeH4KWkIiwicmVsZWFzZWQiOiIyMDI2LTExLTI1Iiwic3ciOiJydHYtdjQiLCJ2ZXJzaW9uIjoiMi4yIn0=", { cache:"no-store" })
     .then(function(r){ if(!r.ok) throw new Error("http"); return r.json(); })
     .then(function(v){
       var newer = (v.version && v.version !== APP_VERSION) || (v.sw && v.sw !== SW_TAG);
@@ -2301,7 +2301,7 @@ document.getElementById("updateBannerLater").addEventListener("click", function(
 
 /* সার্ভিস ওয়ার্কার: অফলাইন শেল + নতুন সংস্করণ এলে নিজে জানানো */
 if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
-  navigator.serviceWorker.register("data:application/javascript;base64,LyogUkFITUFOIFRWIOKAlCBTZXJ2aWNlIFdvcmtlcgogICDgpoXgpqvgprLgpr7gpofgpqgg4Ka24KeH4KayIOCmleCnjeCmr+CmvuCmtiArIOCmqOCnh+Cmn+Cmk+Cmr+CmvOCmvuCmsOCnjeCmlS3gpqvgpr7gprDgp43gprjgp43gpp8g4KaG4Kaq4Kah4KeH4KafIOCmleCnjOCmtuCmsuClpAogICDgpprgp43gpq/gpr7gpqjgp4fgprIv4Kat4Ka/4Kah4Ka/4KaTIOCmuOCnjeCmn+CnjeCmsOCmv+CmriDgppXgppbgpqjgp4sg4KaV4KeN4Kav4Ka+4Ka2IOCmueCmr+CmvCDgpqjgpr4g4oCUIOCmuOCnh+Cml+CngeCmsuCniyDgprjgpqzgprjgpq7gpq/gprwg4Kay4Ka+4KaH4KatIOCmhuCmuOCnh+ClpCAqLwp2YXIgVkVSU0lPTiA9ICJydHYtdjMiOwp2YXIgQ09SRSA9IFsKICAiLi8iLAogICIuL21hbmlmZXN0LndlYm1hbmlmZXN0IiwKICAiLi9pY29uLTE5Mi5wbmciLAogICIuL2ljb24tNTEyLnBuZyIsCiAgIi4vaWNvbi1tYXNrYWJsZS01MTIucG5nIiwKICAiLi9hcHBsZS10b3VjaC1pY29uLnBuZyIKXTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiaW5zdGFsbCIsIGZ1bmN0aW9uIChldmVudCkgewogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNhY2hlcy5vcGVuKFZFUlNJT04pLnRoZW4oZnVuY3Rpb24gKGNhY2hlKSB7CiAgICAgIHJldHVybiBjYWNoZS5hZGRBbGwoQ09SRSk7CiAgICB9KS50aGVuKGZ1bmN0aW9uICgpIHsgcmV0dXJuIHNlbGYuc2tpcFdhaXRpbmcoKTsgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiYWN0aXZhdGUiLCBmdW5jdGlvbiAoZXZlbnQpIHsKICBldmVudC53YWl0VW50aWwoCiAgICBjYWNoZXMua2V5cygpLnRoZW4oZnVuY3Rpb24gKGtleXMpIHsKICAgICAgcmV0dXJuIFByb21pc2UuYWxsKGtleXMubWFwKGZ1bmN0aW9uIChrKSB7CiAgICAgICAgcmV0dXJuIGsgPT09IFZFUlNJT04gPyBudWxsIDogY2FjaGVzLmRlbGV0ZShrKTsKICAgICAgfSkpOwogICAgfSkudGhlbihmdW5jdGlvbiAoKSB7IHJldHVybiBzZWxmLmNsaWVudHMuY2xhaW0oKTsgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiZmV0Y2giLCBmdW5jdGlvbiAoZXZlbnQpIHsKICB2YXIgcmVxID0gZXZlbnQucmVxdWVzdDsKICBpZiAocmVxLm1ldGhvZCAhPT0gIkdFVCIpIHJldHVybjsKICB2YXIgdXJsID0gbmV3IFVSTChyZXEudXJsKTsKCiAgLyog4Ka44KeN4Kaf4KeN4Kaw4Ka/4KauL+CmreCmv+CmoeCmv+Cmky/gpqzgpr7gpofgprDgp4fgprAg4KaV4Kao4Kaf4KeH4Kao4KeN4KafOiDgppXgp43gpq/gpr7gprYg4Kao4Kav4Ka8LCDgprjgprDgpr7gprjgprDgpr8g4Kao4KeH4Kaf4KaT4Kav4Ka84Ka+4Kaw4KeN4KaVICovCiAgaWYgKHVybC5vcmlnaW4gIT09IHNlbGYubG9jYXRpb24ub3JpZ2luKSByZXR1cm47CiAgaWYgKC9cLihtM3U4fG1wZHxtcDR8bWt2fHRzfGFhY3xrZXkpKCR8XD8pL2kudGVzdCh1cmwucGF0aG5hbWUpKSByZXR1cm47CgogIC8qIHZlcnNpb24uanNvbjog4Ka44Kas4Ka44Kau4Kav4Ka8IOCmqOCnh+Cmn+Cmk+Cmr+CmvOCmvuCmsOCnjeCmlSDgpqXgp4fgppXgp4cg4oCUIOCmhuCmquCmoeCnh+CmnyDgpprgp4fgppXgp4fgprAg4Kac4Kao4KeN4KavICovCiAgaWYgKC92ZXJzaW9uXC5qc29uJC8udGVzdCh1cmwucGF0aG5hbWUpKSB7CiAgICBldmVudC5yZXNwb25kV2l0aChmZXRjaChyZXEsIHsgY2FjaGU6ICJuby1zdG9yZSIgfSkuY2F0Y2goZnVuY3Rpb24gKCkgewogICAgICByZXR1cm4gY2FjaGVzLm1hdGNoKHJlcSk7CiAgICB9KSk7CiAgICByZXR1cm47CiAgfQoKICAvKiDgpqrgp4fgppwgKEhUTUwpOiBuZXR3b3JrLWZpcnN0IOKAlCDgpqjgpqTgp4Hgpqgg4Ka44KaC4Ka44KeN4KaV4Kaw4KajIOCmpeCmvuCmleCmsuCnhyDgprjgp4fgpp/gpr7gpocg4KaG4Ka44Kas4KeHICovCiAgaWYgKHJlcS5tb2RlID09PSAibmF2aWdhdGUiIHx8IC9cLmh0bWw/JC8udGVzdCh1cmwucGF0aG5hbWUpIHx8IHVybC5wYXRobmFtZS5lbmRzV2l0aCgiLyIpKSB7CiAgICBldmVudC5yZXNwb25kV2l0aCgKICAgICAgZmV0Y2gocmVxKS50aGVuKGZ1bmN0aW9uIChyZXMpIHsKICAgICAgICB2YXIgY29weSA9IHJlcy5jbG9uZSgpOwogICAgICAgIGNhY2hlcy5vcGVuKFZFUlNJT04pLnRoZW4oZnVuY3Rpb24gKGNhY2hlKSB7IGNhY2hlLnB1dChyZXEsIGNvcHkpOyB9KTsKICAgICAgICByZXR1cm4gcmVzOwogICAgICB9KS5jYXRjaChmdW5jdGlvbiAoKSB7CiAgICAgICAgcmV0dXJuIGNhY2hlcy5tYXRjaChyZXEpLnRoZW4oZnVuY3Rpb24gKGhpdCkgewogICAgICAgICAgcmV0dXJuIGhpdCB8fCBjYWNoZXMubWF0Y2goIi4vIik7CiAgICAgICAgfSk7CiAgICAgIH0pCiAgICApOwogICAgcmV0dXJuOwogIH0KCiAgLyog4Kas4Ka+4KaV4Ka/IOCmheCnjeCmr+CmvuCmuOCnh+Cmnzogc3RhbGUtd2hpbGUtcmV2YWxpZGF0ZSAqLwogIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKHJlcSkudGhlbihmdW5jdGlvbiAoaGl0KSB7CiAgICAgIHZhciBuZXQgPSBmZXRjaChyZXEpLnRoZW4oZnVuY3Rpb24gKHJlcykgewogICAgICAgIHZhciBjb3B5ID0gcmVzLmNsb25lKCk7CiAgICAgICAgY2FjaGVzLm9wZW4oVkVSU0lPTikudGhlbihmdW5jdGlvbiAoY2FjaGUpIHsgY2FjaGUucHV0KHJlcSwgY29weSk7IH0pOwogICAgICAgIHJldHVybiByZXM7CiAgICAgIH0pLmNhdGNoKGZ1bmN0aW9uICgpIHsgcmV0dXJuIGhpdDsgfSk7CiAgICAgIHJldHVybiBoaXQgfHwgbmV0OwogICAgfSkKICApOwp9KTsKCi8qIOCmquCnh+CmnCDgpqXgp4fgppXgp4cgIuCmj+CmluCmqOCmhyDgpobgpqrgpqHgp4fgpp8iIOCmquCnh+CmsuCnhyDgpoXgpqrgp4fgppXgp43gprfgpq7gpr7gpqMg4KaT4Kav4Ka84Ka+4Kaw4KeN4KaV4Ka+4KawIOCmuOCmleCnjeCmsOCmv+Cmr+CmvCDgppXgprDgpr4gKi8Kc2VsZi5hZGRFdmVudExpc3RlbmVyKCJtZXNzYWdlIiwgZnVuY3Rpb24gKGV2ZW50KSB7CiAgaWYgKGV2ZW50LmRhdGEgJiYgZXZlbnQuZGF0YS50eXBlID09PSAiU0tJUF9XQUlUSU5HIikgc2VsZi5za2lwV2FpdGluZygpOwp9KTsK", { scope:"assets/" }).then(function(reg){
+  navigator.serviceWorker.register("data:application/javascript;base64,LyogUkFITUFOIFRWIOKAlCBTZXJ2aWNlIFdvcmtlcgogICDgpoXgpqvgprLgpr7gpofgpqgg4Ka24KeH4KayIOCmleCnjeCmr+CmvuCmtiArIOCmqOCnh+Cmn+Cmk+Cmr+CmvOCmvuCmsOCnjeCmlS3gpqvgpr7gprDgp43gprjgp43gpp8g4KaG4Kaq4Kah4KeH4KafIOCmleCnjOCmtuCmsuClpAogICDgpprgp43gpq/gpr7gpqjgp4fgprIv4Kat4Ka/4Kah4Ka/4KaTIOCmuOCnjeCmn+CnjeCmsOCmv+CmriDgppXgppbgpqjgp4sg4KaV4KeN4Kav4Ka+4Ka2IOCmueCmr+CmvCDgpqjgpr4g4oCUIOCmuOCnh+Cml+CngeCmsuCniyDgprjgpqzgprjgpq7gpq/gprwg4Kay4Ka+4KaH4KatIOCmhuCmuOCnh+ClpCAqLwp2YXIgVkVSU0lPTiA9ICJydHYtdjQiOwp2YXIgQ09SRSA9IFsKICAiLi8iLAogICIuL21hbmlmZXN0LndlYm1hbmlmZXN0IiwKICAiLi9pY29uLTE5Mi5wbmciLAogICIuL2ljb24tNTEyLnBuZyIsCiAgIi4vaWNvbi1tYXNrYWJsZS01MTIucG5nIiwKICAiLi9hcHBsZS10b3VjaC1pY29uLnBuZyIKXTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiaW5zdGFsbCIsIGZ1bmN0aW9uIChldmVudCkgewogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNhY2hlcy5vcGVuKFZFUlNJT04pLnRoZW4oZnVuY3Rpb24gKGNhY2hlKSB7CiAgICAgIHJldHVybiBjYWNoZS5hZGRBbGwoQ09SRSk7CiAgICB9KS50aGVuKGZ1bmN0aW9uICgpIHsgcmV0dXJuIHNlbGYuc2tpcFdhaXRpbmcoKTsgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiYWN0aXZhdGUiLCBmdW5jdGlvbiAoZXZlbnQpIHsKICBldmVudC53YWl0VW50aWwoCiAgICBjYWNoZXMua2V5cygpLnRoZW4oZnVuY3Rpb24gKGtleXMpIHsKICAgICAgcmV0dXJuIFByb21pc2UuYWxsKGtleXMubWFwKGZ1bmN0aW9uIChrKSB7CiAgICAgICAgcmV0dXJuIGsgPT09IFZFUlNJT04gPyBudWxsIDogY2FjaGVzLmRlbGV0ZShrKTsKICAgICAgfSkpOwogICAgfSkudGhlbihmdW5jdGlvbiAoKSB7IHJldHVybiBzZWxmLmNsaWVudHMuY2xhaW0oKTsgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiZmV0Y2giLCBmdW5jdGlvbiAoZXZlbnQpIHsKICB2YXIgcmVxID0gZXZlbnQucmVxdWVzdDsKICBpZiAocmVxLm1ldGhvZCAhPT0gIkdFVCIpIHJldHVybjsKICB2YXIgdXJsID0gbmV3IFVSTChyZXEudXJsKTsKCiAgLyog4Ka44KeN4Kaf4KeN4Kaw4Ka/4KauL+CmreCmv+CmoeCmv+Cmky/gpqzgpr7gpofgprDgp4fgprAg4KaV4Kao4Kaf4KeH4Kao4KeN4KafOiDgppXgp43gpq/gpr7gprYg4Kao4Kav4Ka8LCDgprjgprDgpr7gprjgprDgpr8g4Kao4KeH4Kaf4KaT4Kav4Ka84Ka+4Kaw4KeN4KaVICovCiAgaWYgKHVybC5vcmlnaW4gIT09IHNlbGYubG9jYXRpb24ub3JpZ2luKSByZXR1cm47CiAgaWYgKC9cLihtM3U4fG1wZHxtcDR8bWt2fHRzfGFhY3xrZXkpKCR8XD8pL2kudGVzdCh1cmwucGF0aG5hbWUpKSByZXR1cm47CgogIC8qIHZlcnNpb24uanNvbjog4Ka44Kas4Ka44Kau4Kav4Ka8IOCmqOCnh+Cmn+Cmk+Cmr+CmvOCmvuCmsOCnjeCmlSDgpqXgp4fgppXgp4cg4oCUIOCmhuCmquCmoeCnh+CmnyDgpprgp4fgppXgp4fgprAg4Kac4Kao4KeN4KavICovCiAgaWYgKC92ZXJzaW9uXC5qc29uJC8udGVzdCh1cmwucGF0aG5hbWUpKSB7CiAgICBldmVudC5yZXNwb25kV2l0aChmZXRjaChyZXEsIHsgY2FjaGU6ICJuby1zdG9yZSIgfSkuY2F0Y2goZnVuY3Rpb24gKCkgewogICAgICByZXR1cm4gY2FjaGVzLm1hdGNoKHJlcSk7CiAgICB9KSk7CiAgICByZXR1cm47CiAgfQoKICAvKiDgpqrgp4fgppwgKEhUTUwpOiBuZXR3b3JrLWZpcnN0IOKAlCDgpqjgpqTgp4Hgpqgg4Ka44KaC4Ka44KeN4KaV4Kaw4KajIOCmpeCmvuCmleCmsuCnhyDgprjgp4fgpp/gpr7gpocg4KaG4Ka44Kas4KeHICovCiAgaWYgKHJlcS5tb2RlID09PSAibmF2aWdhdGUiIHx8IC9cLmh0bWw/JC8udGVzdCh1cmwucGF0aG5hbWUpIHx8IHVybC5wYXRobmFtZS5lbmRzV2l0aCgiLyIpKSB7CiAgICBldmVudC5yZXNwb25kV2l0aCgKICAgICAgZmV0Y2gocmVxKS50aGVuKGZ1bmN0aW9uIChyZXMpIHsKICAgICAgICB2YXIgY29weSA9IHJlcy5jbG9uZSgpOwogICAgICAgIGNhY2hlcy5vcGVuKFZFUlNJT04pLnRoZW4oZnVuY3Rpb24gKGNhY2hlKSB7IGNhY2hlLnB1dChyZXEsIGNvcHkpOyB9KTsKICAgICAgICByZXR1cm4gcmVzOwogICAgICB9KS5jYXRjaChmdW5jdGlvbiAoKSB7CiAgICAgICAgcmV0dXJuIGNhY2hlcy5tYXRjaChyZXEpLnRoZW4oZnVuY3Rpb24gKGhpdCkgewogICAgICAgICAgcmV0dXJuIGhpdCB8fCBjYWNoZXMubWF0Y2goIi4vIik7CiAgICAgICAgfSk7CiAgICAgIH0pCiAgICApOwogICAgcmV0dXJuOwogIH0KCiAgLyog4Kas4Ka+4KaV4Ka/IOCmheCnjeCmr+CmvuCmuOCnh+Cmnzogc3RhbGUtd2hpbGUtcmV2YWxpZGF0ZSAqLwogIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKHJlcSkudGhlbihmdW5jdGlvbiAoaGl0KSB7CiAgICAgIHZhciBuZXQgPSBmZXRjaChyZXEpLnRoZW4oZnVuY3Rpb24gKHJlcykgewogICAgICAgIHZhciBjb3B5ID0gcmVzLmNsb25lKCk7CiAgICAgICAgY2FjaGVzLm9wZW4oVkVSU0lPTikudGhlbihmdW5jdGlvbiAoY2FjaGUpIHsgY2FjaGUucHV0KHJlcSwgY29weSk7IH0pOwogICAgICAgIHJldHVybiByZXM7CiAgICAgIH0pLmNhdGNoKGZ1bmN0aW9uICgpIHsgcmV0dXJuIGhpdDsgfSk7CiAgICAgIHJldHVybiBoaXQgfHwgbmV0OwogICAgfSkKICApOwp9KTsKCi8qIOCmquCnh+CmnCDgpqXgp4fgppXgp4cgIuCmj+CmluCmqOCmhyDgpobgpqrgpqHgp4fgpp8iIOCmquCnh+CmsuCnhyDgpoXgpqrgp4fgppXgp43gprfgpq7gpr7gpqMg4KaT4Kav4Ka84Ka+4Kaw4KeN4KaV4Ka+4KawIOCmuOCmleCnjeCmsOCmv+Cmr+CmvCDgppXgprDgpr4gKi8Kc2VsZi5hZGRFdmVudExpc3RlbmVyKCJtZXNzYWdlIiwgZnVuY3Rpb24gKGV2ZW50KSB7CiAgaWYgKGV2ZW50LmRhdGEgJiYgZXZlbnQuZGF0YS50eXBlID09PSAiU0tJUF9XQUlUSU5HIikgc2VsZi5za2lwV2FpdGluZygpOwp9KTsK", { scope:"assets/" }).then(function(reg){
     swReg = reg;
     if(reg.waiting && navigator.serviceWorker.controller) onUpdateReady();
     reg.addEventListener("updatefound", function(){
