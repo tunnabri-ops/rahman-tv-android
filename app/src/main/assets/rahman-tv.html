@@ -1405,7 +1405,15 @@ function renderFeed(focusFirst){
     if(first) first.focus();
   }
 }
-function setView(v){ state.view = v; state.page = 0; showFeed(); renderFeed(isTV); syncBottomNav(); }
+function setView(v){
+  state.view = v; state.page = 0;
+  /* ভিউ বদলালে আগের সার্চ আর প্রযোজ্য নয় — কোয়েরি থেকে গেলে filteredItems()
+     ভিউ উপেক্ষা করে সার্চের ফলই দেখাতে থাকে, ফলে নিচের নেভ/সাইডবারে চাপ দিলেও
+     পছন্দের তালিকা বা ক্যাটাগরির আসল কনটেন্ট আসত না */
+  if(state.q){ state.q = ""; searchInput.value = ""; }
+  document.getElementById("searchWrap").classList.remove("open");
+  showFeed(); renderFeed(isTV); syncBottomNav();
+}
 function syncBottomNav(){
   document.querySelectorAll(".bn-item").forEach(function(b){
     var k = b.getAttribute("data-bn");
@@ -1425,7 +1433,9 @@ var serverRail = document.getElementById("serverRail");
 
 /* ----- সার্ভার রেল: চলমান চ্যানেলের সব সোর্স ছোট বাটনে ----- */
 function renderServerRail(){
-  if(!current || current.kind!=="channel" || !current.servers || !current.servers.length){
+  /* সার্ভার রেল শুধু তখনই অর্থবহ, যখন চ্যানেলটির একাধিক সোর্স আছে —
+     একটিমাত্র সোর্স থাকলে একা "সার্ভার ১" বাটন দেখানো শুধুই নয়েজ */
+  if(!current || current.kind!=="channel" || !current.servers || current.servers.length < 2){
     serverRail.hidden = true; serverRail.innerHTML = ""; return;
   }
   serverRail.hidden = false;
@@ -1485,6 +1495,12 @@ function stopPlayer(){
 }
 function showPlayerError(fmt){
   hideLoading();
+  /* এরর স্ক্রিন এলে কাস্টম কন্ট্রোল বার সরিয়ে দেওয়া হয় — নইলে সিক বার ও
+     সময়ের সারি (z-index বেশি) এরর লেখা আর "আবার চেষ্টা" বাটনের ওপরে ভেসে
+     থাকে, মোবাইলে বাটনটা সিক বারের নিচে চাপা পড়ে যায় */
+  tgControls.classList.remove("show");
+  clearTimeout(ctlHideTimer);
+  playerWrap.classList.remove("tg-idle");
   var extra = fmt==="mkv" ? "<br/>MKV ফরম্যাট সব ব্রাউজারে চলে না — Chrome/Edge-এ চেষ্টা করুন।" : "";
   /* চলমান সার্ভারটা ব্যর্থ হিসেবে চিহ্নিত করা হয়; পরের সার্ভার থাকলে
      প্লেয়ারেই সেটা চেষ্টা করার বাটন দেখায় */
@@ -1720,6 +1736,8 @@ function updateMuteIcon(){
 var ctlHideTimer = null;
 function showControls(sticky){
   if(!current || current.kind === "natok") return;
+  /* এরর স্ক্রিন খোলা থাকলে কন্ট্রোল বার তার ওপরে আনা হয় না */
+  if(playerMsg.classList.contains("show")) return;
   tgControls.classList.add("show");
   playerWrap.classList.remove("tg-idle");
   clearTimeout(ctlHideTimer);
@@ -1758,7 +1776,8 @@ player.addEventListener("playing", function(){
 });
 player.addEventListener("canplay", function(){ hideLoading(); });
 player.addEventListener("waiting", function(){
-  if(current && current.kind !== "natok") showLoading("Buffering…");
+  /* এরর স্ক্রিনের ওপরে বাফারিং স্পিনার নয় — এররটাই তখন আসল তথ্য */
+  if(current && current.kind !== "natok" && !playerMsg.classList.contains("show")) showLoading("Buffering…");
 });
 player.addEventListener("pause", function(){ updatePlayIcon(); showControls(true); });
 player.addEventListener("play", function(){ updatePlayIcon(); scheduleHideControls(); });
