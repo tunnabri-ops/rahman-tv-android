@@ -675,6 +675,7 @@ html[data-hatch-target="tv"] #liveSection{display:none}
   .sidebar .nav-item{flex-direction:column; gap:5px; height:60px; justify-content:center; font-size:10.5px; padding:0 2px; text-align:center}
   .sidebar .nav-item .cnt{display:none}
   .sidebar .nav-head{display:none}
+  .sidebar .nav-note{display:none}
 }
 /* ---------- Responsive: mobile (design 22) ---------- */
 @media (max-width:640px){
@@ -701,6 +702,7 @@ html[data-hatch-target="tv"] #liveSection{display:none}
   .sidebar .nav-item{flex-direction:row; gap:20px; height:46px; font-size:15px; justify-content:flex-start; text-align:left; padding:0 12px}
   .sidebar .nav-item .cnt{display:block}
   .sidebar .nav-head{display:block}
+  .sidebar .nav-note{display:block}
   .scrim.show{display:block; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:75}
   .main{padding:0 14px 132px}
   .grid{grid-template-columns:minmax(0,1fr); gap:26px 16px}
@@ -729,6 +731,7 @@ html[data-hatch-target="tv"] #liveSection{display:none}
   #feedView .feed-head{display:none}
   .status-line{margin-top:2px}
   .bottom-nav{display:block}
+  .update-banner{bottom:78px}
   .watch-title{font-size:18px}
   .up-thumb{width:132px}
 }
@@ -1119,6 +1122,7 @@ var favorites = {};       /* এই সেশনের জন্য মেমর
 var historyItems = [];    /* এই সেশনে দেখা আইটেম */
 var current = null;
 var hls = null, dashPlayer = null;
+var hlsRecTries = 0; /* HLS fatal এররে অটো-রিকভারি চেষ্টার হিসাব (প্রতি স্ট্রিমে রিসেট) */
 var isTV = document.documentElement.dataset.hatchTarget === "tv";
 var PAGE_SIZE = 8;
 
@@ -1311,7 +1315,9 @@ function bindCards(root){
     if(img && ini){
       img.addEventListener("load", function(){ ini.style.display="none"; });
       img.addEventListener("error", function(){ ini.style.display=""; });
-      if(img.complete && img.naturalWidth) ini.style.display="none";
+      /* লিসেনার বসার আগেই ইমেজ লোড/ফেল হয়ে গেলে (ক্যাশ) সেই অনুযায়ী দেখানো হয় —
+         ফেল হলে অক্ষরটা ফিরিয়ে না আনলে থাম্ব ফাঁকা থেকে যেত */
+      if(img.complete) ini.style.display = img.naturalWidth ? "none" : "";
     }
     var poster = card.querySelector(".thumb img.poster");
     if(poster && ini){
@@ -1399,7 +1405,7 @@ function renderFeed(focusFirst){
     if(first) first.focus();
   }
 }
-function setView(v){ state.view = v; state.page = 0; showFeed(); renderFeed(false); syncBottomNav(); }
+function setView(v){ state.view = v; state.page = 0; showFeed(); renderFeed(isTV); syncBottomNav(); }
 function syncBottomNav(){
   document.querySelectorAll(".bn-item").forEach(function(b){
     var k = b.getAttribute("data-bn");
@@ -1515,14 +1521,39 @@ function startStream(it){
   var fmt = it.fmt || detectFormat(url);
   if(fmt==="hls"){
     if(window.Hls && Hls.isSupported()){
+      hlsRecTries = 0;
       hls = new Hls({ maxBufferLength: 30 });
       hls.loadSource(url);
       hls.attachMedia(player);
       hls.on(Hls.Events.MANIFEST_PARSED, function(){ buildHlsQualityMenu(); player.play().catch(function(){}); });
       hls.on(Hls.Events.FRAG_LOADED, function(ev, data){
-        if(data && data.stats && data.stats.loaded) statBytes += data.stats.loaded;
+        /* FRAG_LOADED ইভেন্টে stats থাকে না — বাইট সংখ্যা payload বা frag.stats থেকে নিতে হয়,
+           নইলে "Video Data Used" কাউন্টার HLS স্ট্রিমে চিরকাল 0 MB-তেই আটকে থাকত */
+        var n = 0;
+        if(data){
+          if(data.payload && data.payload.byteLength) n = data.payload.byteLength;
+          else if(data.stats && data.stats.loaded) n = data.stats.loaded;
+          else if(data.frag && data.frag.stats && data.frag.stats.loaded) n = data.frag.stats.loaded;
+        }
+        if(n) statBytes += n;
       });
-      hls.on(Hls.Events.ERROR, function(ev, data){ if(data && data.fatal) showPlayerError(fmt); });
+      hls.on(Hls.Events.ERROR, function(ev, data){
+        if(!data || !data.fatal) return;
+        /* ক্ষণিকের নেটওয়ার্ক/মিডিয়া গলদে সাথে সাথে এরর না দেখিয়ে আগে hls.js-এর
+           নিজের রিকভারি চেষ্টা করা হয় — ফ্ল্যাকি IPTV সোর্সে এটাই স্বাভাবিক আচরণ।
+           দুইবার ব্যর্থ হলেই কেবল এরর স্ক্রিন আসে। */
+        if(data.type === Hls.ErrorTypes.NETWORK_ERROR && hlsRecTries < 2){
+          hlsRecTries++; showLoading("Reconnecting…");
+          try{ hls.startLoad(); }catch(e){ showPlayerError(fmt); }
+          return;
+        }
+        if(data.type === Hls.ErrorTypes.MEDIA_ERROR && hlsRecTries < 2){
+          hlsRecTries++; showLoading("Recovering…");
+          try{ hls.recoverMediaError(); }catch(e){ showPlayerError(fmt); }
+          return;
+        }
+        showPlayerError(fmt);
+      });
     } else if(player.canPlayType("application/vnd.apple.mpegurl")){
       player.src = url;
       player.addEventListener("loadedmetadata", function(){ player.play().catch(function(){}); }, { once:true });
@@ -1719,6 +1750,9 @@ tgFsBtn.addEventListener("click", function(){
 player.addEventListener("playing", function(){
   hideLoading();
   tgEmpty.classList.remove("show");
+  /* রিকভারির পর ভিডিও আবার চলতে শুরু করলে পুরনো এরর ওভারলে যেন আটকে না থাকে */
+  playerMsg.classList.remove("show");
+  hlsRecTries = 0;
   updatePlayIcon();
   scheduleHideControls();
 });
@@ -1888,7 +1922,7 @@ function tgThumbInner(it){
   if(it.kind !== "channel" && it.thumb)
     return '<img class="poster" src="' + esc(it.thumb) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()" /><span class="initial">' + ini + '</span>';
   if(it.logo)
-    return '<img class="logo" src="' + esc(it.logo) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()" /><span class="initial">' + ini + '</span>';
+    return '<img class="logo" src="' + esc(it.logo) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()" /><span class="initial" style="display:none">' + ini + '</span>';
   return '<span class="initial">' + ini + '</span>';
 }
 function tgCardHTML(it){
@@ -1962,7 +1996,8 @@ function renderTgSections(){
     var ini = c.querySelector(".thumb .initial");
     if(img && ini){
       img.addEventListener("load", function(){ ini.style.display = "none"; });
-      if(img.complete && img.naturalWidth) ini.style.display = "none";
+      img.addEventListener("error", function(){ ini.style.display = ""; });
+      if(img.complete) ini.style.display = img.naturalWidth ? "none" : "";
     }
   });
   tgSections.querySelectorAll(".tg-sec-all").forEach(function(b){
@@ -2058,9 +2093,15 @@ document.addEventListener("keydown", function(e){
   if(keys.indexOf(e.key) < 0) return;
   var focusables = Array.prototype.slice.call(document.querySelectorAll(
     ".card, .nav-item, .chip, .icon-btn, .live-pill, .install-btn, .search-box input, .pill-btn, .back-btn, .pager button, .brand, .card-menu button, .tg-card, .tg-pill, .srv-btn, .tg-ctl-btn, .tg-q-btn, .tg-sec-all, .tg-filter-btn, .tg-fav, .tg-search input, .tg-btn-ghost, .tg-btn-red, .tg-q-menu button, .tg-filter-menu button"
-  )).filter(function(el){ return el.offsetParent !== null; });
+  )).filter(function(el){ return el.getClientRects().length > 0; });
   var act = document.activeElement;
-  if(!act || focusables.indexOf(act) < 0) return;
+  if(!act || focusables.indexOf(act) < 0){
+    /* ভিউ বদলালে DOM আবার তৈরি হয়, ফলে ফোকাস করা এলিমেন্টটাই মুছে গিয়ে
+       ফোকাস body-তে চলে যায় — তখন প্রথম ফোকাসযোগ্য আইটেমে ফোকাস ফিরিয়ে
+       না দিলে D-pad চিরতরে আটকে যেত */
+    if(focusables.length){ e.preventDefault(); focusables[0].focus(); }
+    return;
+  }
   var r = act.getBoundingClientRect();
   var cx = r.left + r.width/2, cy = r.top + r.height/2;
   var best = null, bestScore = Infinity;
