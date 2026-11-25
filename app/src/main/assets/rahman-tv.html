@@ -244,7 +244,7 @@ html[data-hatch-target="tv"] #castBtn{display:none}
   position:absolute; inset:0; z-index:1; width:100%; height:100%; object-fit:cover;
 }
 .up-thumb img.poster{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1}
-.player-wrap iframe{width:100%; height:100%; border:0; display:none; background:#000}
+.player-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0; display:none; background:#000}
 .thumb .initial{
   position:relative; z-index:2; font-size:56px; font-weight:900; color:#fff;
   text-shadow:0 4px 18px rgba(0,0,0,.6); letter-spacing:.5px;
@@ -326,10 +326,19 @@ html[data-hatch-target="tv"] #castBtn{display:none}
 .watch{display:none}
 .watch.open{display:block}
 .watch-grid{display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:22px; align-items:start}
+.watch-left,.watch-right{min-width:0; min-height:0}
 .player-wrap{
-  position:relative; aspect-ratio:16/9; background:#000; border-radius:14px; overflow:hidden;
+  position:relative; width:100%; max-width:100%; aspect-ratio:16/9;
+  max-height:75vh; max-height:75dvh;
+  background:#000; border-radius:14px; overflow:hidden;
 }
-.player-wrap video{width:100%; height:100%; display:block; background:#000; object-fit:contain}
+.player-wrap video{
+  position:absolute; inset:0; width:100%; height:100%; max-width:100%; max-height:100%;
+  display:block; background:#000; object-fit:contain;
+}
+@supports not (aspect-ratio: 16 / 9){
+  .player-wrap{height:0; padding-top:56.25%}
+}
 .player-msg{
   position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center;
   color:#fff; padding:24px; font-size:15px; line-height:1.6; background:rgba(0,0,0,.72); z-index:5;
@@ -385,7 +394,7 @@ html[data-hatch-target="tv"] #castBtn{display:none}
 .watch{
   --nv-bg:#05070f; --nv-bg2:#0a1120; --nv-panel:#0d1526; --nv-panel2:#111c33;
   --nv-line:#1e293b; --nv-green:#22c55e; --nv-pink:#ff2d55; --nv-sub:#94a3b8;
-  margin:0 -22px; padding:8px 22px 40px; color:#fff;
+  margin:0 -22px; padding:8px 22px 40px; color:#fff; overflow-x:clip;
   background:linear-gradient(180deg,var(--nv-bg2),var(--nv-bg) 260px,var(--nv-bg));
 }
 .watch .back-btn{background:var(--nv-panel); border:1px solid var(--nv-line); color:#fff}
@@ -398,6 +407,9 @@ html[data-hatch-target="tv"] #castBtn{display:none}
 }
 @media (max-width:640px){
   .watch{margin:0 -14px; padding:8px 14px 34px}
+  /* মোবাইল পোর্ট্রেটে প্লেয়ার কখনোই স্ক্রিনের উচ্চতা দখল করবে না:
+     উচ্চতা সবসময় চওড়ার 16:9 অনুপাতে আটকানো */
+  .watch .player-wrap{max-height:calc((100vw - 28px) * 9 / 16)}
 }
 html[data-hatch-target="tv"] .watch{margin:0; padding:0; background:#05070f}
 html[data-hatch-target="tv"] .watch-left{position:static}
@@ -1565,6 +1577,7 @@ function playItem(it){
   if(historyItems.length > 40) historyItems = historyItems.slice(0,40);
   renderTgPills();
   renderTgSections();
+  clampPlayerSize();
   startStream(it);
   renderServerRail();
   updatePlayIcon();
@@ -1584,6 +1597,24 @@ document.getElementById("favBtn").addEventListener("click", function(){
   updateFavBtn(); renderNav(); renderTgSections();
 });
 document.getElementById("backBtn").addEventListener("click", function(){ showFeed(); renderFeed(false); });
+
+/* প্লেয়ারের উচ্চতা সবসময় চওড়ার 16:9 অনুপাতে আটকানো থাকে — ভিডিও চালু
+   হলেও (মেটাডেটা লোড, স্ট্রিমের নিজস্ব সাইজ) প্লেয়ার যেন স্ক্রিনজুড়ে
+   বড় হয়ে না যায়, পুরনো WebView-এ CSS aspect-ratio কাজ না করলেও */
+function clampPlayerSize(){
+  var pw = document.getElementById("playerWrap");
+  if(!pw) return;
+  if(!watchView.classList.contains("open")){ pw.style.maxHeight = ""; return; }
+  var w = pw.clientWidth;
+  if(w > 0){
+    var cap = Math.min(Math.round(w * 9 / 16), Math.round(window.innerHeight * 0.75));
+    pw.style.maxHeight = cap + "px";
+  }
+}
+player.addEventListener("loadedmetadata", clampPlayerSize);
+player.addEventListener("playing", clampPlayerSize);
+window.addEventListener("resize", clampPlayerSize);
+window.addEventListener("orientationchange", function(){ setTimeout(clampPlayerSize, 60); });
 
 /* ---------- Teleghor-স্টাইল প্লেয়ার: কাস্টম কন্ট্রোল, স্ট্যাটস, পিল, ক্যাটালগ ---------- */
 var playerWrap = document.getElementById("playerWrap");
